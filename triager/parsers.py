@@ -2,27 +2,37 @@ import os
 import re
 import logging
 
+from classifier.document import Document
+
 
 class MRSParser(object):
-    """Parses MRS data stored in a folder as html files into following list:
-    [summary, description, assignee]
+    """Parses MRS data stored in a folder as html files into list of documents.
     """
 
     def __init__(self, folder):
         self.folder = folder
 
     def parse(self):
+        """Parses data from given folder into list of documents
+
+        :returns: List of Document objects
+        """
+
         files = os.listdir(self.folder)
-        data = []
+        documents = []
 
         for f in files:
             if f not in ['.DS_Store']:  # excluded files
                 full_f = os.path.join(self.folder, f)
                 ticket_info = self._parse_file(full_f)
                 if ticket_info:
-                    data.append(ticket_info)
+                    if ticket_info[2] == "Unassigned":
+                        ticket_info[2] = None
+                    document = Document(
+                        ticket_info[0], ticket_info[1], ticket_info[2])
+                    documents.append(document)
 
-        return data
+        return documents
 
     def _parse_file(self, fname):
         with open(fname) as f:
