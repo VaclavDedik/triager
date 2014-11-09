@@ -10,11 +10,15 @@ class AbstractSelector(object):
     def build(self, documents):
         """This method is used to build features and labels from LABELED
         documents and return feature vector and label for each document.
+        This method is expected to initialize field ``labels`` which is used
+        by default implementation of ``get_label`` to get string representation
+        of provided int representation of the label.
 
         :param documents: List of labeled Document objects.
         :returns: Tuple of X and Y where X is a list of feature vectors for
                   each document and Y a column vector containing labels (in
-                  integer)."""
+                  integer).
+        """
 
         raise NotImplementedError(
             "Method %s#build not implemented.", self.__class__.__name__)
@@ -24,10 +28,21 @@ class AbstractSelector(object):
         Note that before running this method, method ``build`` must be run.
 
         :param document: Document you want a feature vector for.
-        :returns: Feature vector."""
+        :returns: Feature vector.
+        """
 
         raise NotImplementedError(
             "Method %s#get_x not implemented.", self.__class__.__name__)
+
+    def get_label(self, y):
+        """Returns string representation of label for integer representation.
+        Note that before running this method, method ``build`` must be run.
+
+        :param y: Integer representation of the label.
+        :returns: String representation of the given ``y``.
+        """
+
+        return self.labels[y]
 
     def _build_labels(self, documents):
         labels = {document.label for document in documents}
@@ -37,9 +52,14 @@ class AbstractSelector(object):
 class BasicSelector(AbstractSelector):
     """This implementation of feature selector simply creates a feature vector
     from a bag of words. A document is converted into a feature vector by
-    simply counting the number of words."""
+    simply counting the number of words.
+    """
 
     def build(self, documents):
+        """Builds feature vector from words contained in all provided
+        documents (concatenates document title with content).
+        """
+
         self._build_labels(documents)
         self._build_features(documents)
         X, Y = [], []
@@ -53,6 +73,10 @@ class BasicSelector(AbstractSelector):
         return np.array(X), np.transpose([Y])
 
     def get_x(self, document):
+        """Counts words in provided document (both in title and summary
+        together).
+        """
+
         x = np.zeros(len(self.features))
         word_counts = self._count_words(
             "%s\n%s" % (document.title, document.content))
