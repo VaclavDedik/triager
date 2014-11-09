@@ -3,17 +3,23 @@ import re
 import logging
 
 from classifier.document import Document
+from classifier.parsers import DocumentParser
 
 
-class MRSParser(object):
+class MRSParser(DocumentParser):
     """Parses MRS data stored in a folder as html files into list of documents.
+    Title of the document is parsed from the header of the file, content is
+    parsed from *Problem Description* section. Label is parsed from the first
+    *Action-By* field which represents the assignee. If Action-By field
+    contains *Unassigned*, the label is replaced by ``None`` object in the
+    ``Document`` object.
     """
 
     def __init__(self, folder):
         self.folder = folder
 
     def parse(self):
-        """Parses data from given folder into list of documents
+        """Parses data from given folder into list of documents.
 
         :returns: List of Document objects
         """

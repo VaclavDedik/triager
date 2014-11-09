@@ -1,5 +1,4 @@
 
-
 class Document(object):
     """Class that represents a text document that is to be classified."""
 
