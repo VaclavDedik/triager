@@ -2,8 +2,9 @@ import numpy as np
 
 
 class AbstractModel(object):
-    """Abstract model. When implementing a subclass, you have to implement
-    method ``train``. Method ``predict`` is implemented by default.
+    """Abstract model of a learning algorithm. When implementing a subclass,
+    you have to implement method ``train``. Method ``predict`` is implemented
+    by default.
     """
 
     def __init__(self, feature_selector):
@@ -15,7 +16,7 @@ class AbstractModel(object):
         self.feature_selector = feature_selector
 
     def train(self, documents):
-        """Trains the model on the provided list of LABELED documents.
+        """Trains the model on the provided list of **labeled** documents.
         This method is expected to initialize field ``predictor``, otherwise
         implemented method predict won't work.
         """
@@ -25,6 +26,7 @@ class AbstractModel(object):
 
     def predict(self, document):
         """Predicts label for given document.
+        Note that before running this method, method ``train`` must be run.
 
         :param document: Document to be labeled.
         :returns: Predicted label of the document.
