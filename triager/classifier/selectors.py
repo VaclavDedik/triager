@@ -9,7 +9,7 @@ class AbstractSelector(object):
 
     def build(self, documents):
         """This method is used to build features and labels from **labeled**
-        documents and return feature vector and label for each document.
+        documents and return a feature vector with a label for each document.
         This method is expected to initialize field ``labels`` which is used
         by default implementation of ``get_label`` to get string representation
         of provided int representation of the label.

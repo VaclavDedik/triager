@@ -32,9 +32,34 @@ class AbstractModel(object):
         :returns: Predicted label of the document.
         """
 
+        raise NotImplementedError(
+            "Method %s#predict not implemented.", self.__class__.__name__)
+
+
+class NaiveBayesModel(AbstractModel):
+    """Naive Bayes model."""
+
+    def __init__(self, feature_selector):
+        super(NaiveBayesModel, self).__init__(feature_selector)
+
+    def train(self, documents):
+        X, Y = self.feature_selector.build(documents)
+        P_Y = np.bincount(np.concatenate(Y))
+        P_Y = P_Y/float(P_Y.size)
+        P_XY = []
+        for i in range(P_Y.size):
+            P_XY_i = np.sum(X * (Y == i), axis=0) / P_Y[i]
+            P_XY.append(P_XY_i)
+
+        self.prior = np.transpose([P_Y])
+        self.likelihood = np.array(P_XY)
+
+    def predict(self, document):
         x = self.feature_selector.get_x(document)
-        predictions = np.dot(self.predictor, x)
-        y = predictions.index(max(predictions))
+        predictions = self.prior * np.transpose(
+            [np.product(self.likelihood ** x, axis=1)])
+        y = np.argmax(predictions)
+        print predictions.shape
         label = self.feature_selector.get_label(y)
 
         return label
