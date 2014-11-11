@@ -11,14 +11,20 @@ class AbstractModel(object):
         """Default initializer requires only feature selector to be specified.
         If you want to add additional parameters to your implementation of the
         model, be sure to call this initializer in your initializer first.
+
+        :param feature_selector: Feature selector class from package
+               ``selectors``.
         """
 
         self.feature_selector = feature_selector
 
     def train(self, documents):
         """Trains the model on the provided list of **labeled** documents.
-        This method is expected to initialize field ``predictor``, otherwise
-        implemented method predict won't work.
+        This method is expected to initialize some sort of predictor field(s)
+        that will be used by method ``predict``, e.g. in Naive Bayes model,
+        the initialized fields could be ``prior`` and ``likelihood``.
+
+        :param documents: Labeled documents used to train the predictor.
         """
 
         raise NotImplementedError(
@@ -37,7 +43,8 @@ class AbstractModel(object):
 
 
 class NaiveBayesModel(AbstractModel):
-    """Naive Bayes model."""
+    """Naive Bayes model. No +1 smoothing is used in this model, the selecotor
+    is expected to remove words that are not in the vocabulary."""
 
     def __init__(self, feature_selector):
         super(NaiveBayesModel, self).__init__(feature_selector)
@@ -59,7 +66,6 @@ class NaiveBayesModel(AbstractModel):
         predictions = self.prior * np.transpose(
             [np.product(self.likelihood ** x, axis=1)])
         y = np.argmax(predictions)
-        print predictions.shape
         label = self.feature_selector.get_label(y)
 
         return label
