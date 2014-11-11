@@ -1,4 +1,7 @@
 import numpy as np
+from sklearn import svm
+
+from kernels import GaussianKernel
 
 
 class AbstractModel(object):
@@ -74,8 +77,23 @@ class NaiveBayesModel(AbstractModel):
 class SVMModel(AbstractModel):
     """Support Vector Machine model."""
 
-    def __init__(self, feature_selector):
+    def __init__(self, feature_selector, kernel=GaussianKernel(), C=1):
         super(SVMModel, self).__init__(feature_selector)
+        self.C = C
+        self.kernel = kernel
 
     def train(self, documents):
         X, Y = self.feature_selector.build(documents)
+        if hasattr(self.kernel, 'sklearn_name'):
+            self.svm = svm.SVC(C=self.C, kernel=self.kernel.sklearn_name,
+                               **self.kernel.sklearn_params)
+        else:
+            self.svm = svm.SVC(C=self.C, kernel=self.kernel.compute)
+        svm.fit(X, Y)
+
+    def predict(self, document):
+        x = self.feature_selector.get_x(document)
+        y = self.svm.predict([x])
+        label = self.feature_selector.get_label(y)
+
+        return label
