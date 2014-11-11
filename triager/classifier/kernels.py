@@ -12,7 +12,7 @@ class AbstractKernel(object):
         """
 
         raise NotImplementedError(
-            "Method %s#compute not implemented.", self.__class__.__name__)
+            "Method %s#compute not implemented." % self.__class__.__name__)
 
 
 class GaussianKernel(AbstractKernel):

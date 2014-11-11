@@ -14,4 +14,4 @@ class DocumentParser(object):
         """
 
         raise NotImplementedError(
-            "Method %s#parse not implemented.", self.__class__.__name__)
+            "Method %s#parse not implemented." % self.__class__.__name__)

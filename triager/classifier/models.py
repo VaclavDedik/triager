@@ -31,7 +31,7 @@ class AbstractModel(object):
         """
 
         raise NotImplementedError(
-            "Method %s#train not implemented.", self.__class__.__name__)
+            "Method %s#train not implemented." % self.__class__.__name__)
 
     def predict(self, document):
         """Predicts label for given document.
@@ -42,11 +42,11 @@ class AbstractModel(object):
         """
 
         raise NotImplementedError(
-            "Method %s#predict not implemented.", self.__class__.__name__)
+            "Method %s#predict not implemented." % self.__class__.__name__)
 
 
 class NaiveBayesModel(AbstractModel):
-    """Naive Bayes model. No +1 smoothing is used in this model, the selecotor
+    """Naive Bayes model. No +1 smoothing is used in this model, the selector
     is expected to remove words that are not in the vocabulary.
     """
 

@@ -21,7 +21,7 @@ class AbstractSelector(object):
         """
 
         raise NotImplementedError(
-            "Method %s#build not implemented.", self.__class__.__name__)
+            "Method %s#build not implemented." % self.__class__.__name__)
 
     def get_x(self, document):
         """Returns a feature vector for a given document.
@@ -32,7 +32,7 @@ class AbstractSelector(object):
         """
 
         raise NotImplementedError(
-            "Method %s#get_x not implemented.", self.__class__.__name__)
+            "Method %s#get_x not implemented." % self.__class__.__name__)
 
     def get_label(self, y):
         """Returns string representation of label for integer representation.
