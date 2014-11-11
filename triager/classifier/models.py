@@ -47,7 +47,8 @@ class AbstractModel(object):
 
 class NaiveBayesModel(AbstractModel):
     """Naive Bayes model. No +1 smoothing is used in this model, the selecotor
-    is expected to remove words that are not in the vocabulary."""
+    is expected to remove words that are not in the vocabulary.
+    """
 
     def __init__(self, feature_selector):
         super(NaiveBayesModel, self).__init__(feature_selector)
@@ -89,7 +90,7 @@ class SVMModel(AbstractModel):
                                **self.kernel.sklearn_params)
         else:
             self.svm = svm.SVC(C=self.C, kernel=self.kernel.compute)
-        svm.fit(X, Y)
+        self.svm.fit(X, np.concatenate(Y))
 
     def predict(self, document):
         x = self.feature_selector.get_x(document)
