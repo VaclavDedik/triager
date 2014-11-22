@@ -1,5 +1,8 @@
-import re
 import numpy as np
+
+from nltk.corpus import stopwords
+
+import utils
 
 
 class AbstractSelector(object):
@@ -46,7 +49,7 @@ class AbstractSelector(object):
 
     def _build_labels(self, documents):
         labels = {document.label for document in documents}
-        self.labels = sorted(labels)
+        return sorted(labels)
 
 
 class BasicSelector(AbstractSelector):
@@ -55,13 +58,17 @@ class BasicSelector(AbstractSelector):
     simply counting the number of words.
     """
 
+    def __init__(self, min_len=2, min_occur=2):
+        self.min_len = min_len
+        self.min_occur = min_occur
+
     def build(self, documents):
         """Builds feature vector from words contained in all provided
         documents (concatenates document title with content).
         """
 
-        self._build_labels(documents)
-        self._build_features(documents)
+        self.labels = self._build_labels(documents)
+        self.features = self._build_features(documents)
         X, Y = [], []
 
         for document in documents:
@@ -78,7 +85,7 @@ class BasicSelector(AbstractSelector):
         """
 
         x = np.zeros(len(self.features))
-        word_counts = self._count_words(
+        word_counts = utils.count_words(
             "%s\n%s" % (document.title, document.content))
 
         for word, count in word_counts.items():
@@ -93,18 +100,20 @@ class BasicSelector(AbstractSelector):
             consolidated += document.title + "\n"
             consolidated += document.content + "\n"
 
-        words = sorted(self._count_words(consolidated).keys())
-        self.features = words
+        words = sorted(
+            [w for w, c in utils.count_words(consolidated).iteritems()
+             if c >= self.min_occur])
+        words = [w for w in words if len(w) >= self.min_len]
+        return words
 
-    def _count_words(self, text):
-        word_counts = {}
-        removed_symbols = re.sub('[^a-zA-Z]', ' ', text)
-        words = removed_symbols.lower().split()
 
-        for word in words:
-            if word in word_counts:
-                word_counts[word] += 1
-            else:
-                word_counts[word] = 1
+class StopListSelector(BasicSelector):
+    def __init__(self, min_len=2, min_occur=2, language='english'):
+        super(StopListSelector, self).__init__(min_len, min_occur)
+        self.language = language
 
-        return word_counts
+    def _build_features(self, documents):
+        words = super(StopListSelector, self)._build_features(documents)
+        stoplist = stopwords.words(self.language)
+        words_sl = [f for f in words if f.lower() not in stoplist]
+        return words_sl
