@@ -36,15 +36,24 @@ class AbstractSelector(object):
         return np.array(X), np.transpose([Y])
 
     def get_x(self, document):
-        """Returns a feature vector for a given document.
+        """Returns a feature vector for a given document. Default
+        implementation counts words in provided document (both in title and
+        content together) that occur in the feature vector.
         Note that before running this method, method ``build`` must be run.
 
         :param document: Document you want a feature vector for.
         :returns: Feature vector.
         """
 
-        raise NotImplementedError(
-            "Method %s#get_x not implemented." % self.__class__.__name__)
+        x = np.zeros(len(self.features))
+        word_counts = utils.count_words(
+            "%s\n%s" % (document.title, document.content))
+
+        for word, count in word_counts.items():
+            if word in self.features:
+                x_i = self.features.index(word)
+                x[x_i] = count
+        return x
 
     def get_label(self, y):
         """Returns string representation of label for integer representation.
@@ -87,21 +96,6 @@ class BasicSelector(AbstractSelector):
     def __init__(self, min_len=2, min_occur=2):
         self.min_len = min_len
         self.min_occur = min_occur
-
-    def get_x(self, document):
-        """Counts words in provided document (both in title and summary
-        together) that occur in the feature vector.
-        """
-
-        x = np.zeros(len(self.features))
-        word_counts = utils.count_words(
-            "%s\n%s" % (document.title, document.content))
-
-        for word, count in word_counts.items():
-            if word in self.features:
-                x_i = self.features.index(word)
-                x[x_i] = count
-        return x
 
     def _build_features(self, documents):
         """Concatenates all document titles and content together and creates
