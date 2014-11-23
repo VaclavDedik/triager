@@ -15,7 +15,8 @@ def main():
     docs_train = documents[:1500]
     docs_cv = documents[1500:]
     # Create model
-    selector = selectors.StopWordsDecorator(selectors.BasicSelector())
+    selector = selectors.StandardizationDecorator(
+        selectors.StopWordsDecorator(selectors.BasicSelector()))
     kernel = kernels.GaussianKernel()
     model = models.SVMModel(feature_selector=selector, kernel=kernel, C=30)
     print "Created model %s, using feature selector %s." \
@@ -24,9 +25,13 @@ def main():
     print "Training model..."
     model.train(docs_train)
     # Test model
-    accuracy = tests.accuracy(model, docs_cv)
+    print "Computing accuracy for train set..."
+    accuracy_train = tests.accuracy(model, docs_train)
+    print "Computing accuracy for CV set..."
+    accuracy_cv = tests.accuracy(model, docs_cv)
 
-    print "Accuracy is: '%.4f'." % accuracy
+    print "Accuracy of train set is: '%.4f'." % accuracy_train
+    print "Accuracy of CV set is: '%.4f'." % accuracy_cv
 
 if __name__ == "__main__":
     main()

@@ -85,6 +85,7 @@ class SVMModel(AbstractModel):
 
     def train(self, documents):
         X, Y = self.feature_selector.build(documents)
+        self._X, self._Y = X, Y
         if hasattr(self.kernel, 'sklearn_name'):
             self.svm = svm.SVC(C=self.C, kernel=self.kernel.sklearn_name,
                                **self.kernel.sklearn_params)
