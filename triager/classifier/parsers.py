@@ -13,5 +13,4 @@ class DocumentParser(object):
         :returns: List of parsed ``Document`` objects.
         """
 
-        raise NotImplementedError(
-            "Method %s#parse not implemented." % self.__class__.__name__)
+        raise NotImplementedError()

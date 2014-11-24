@@ -30,8 +30,7 @@ class AbstractModel(object):
         :param documents: Labeled documents used to train the predictor.
         """
 
-        raise NotImplementedError(
-            "Method %s#train not implemented." % self.__class__.__name__)
+        raise NotImplementedError()
 
     def predict(self, document):
         """Predicts label for given document.
@@ -41,8 +40,7 @@ class AbstractModel(object):
         :returns: Predicted label of the document.
         """
 
-        raise NotImplementedError(
-            "Method %s#predict not implemented." % self.__class__.__name__)
+        raise NotImplementedError()
 
 
 class NaiveBayesModel(AbstractModel):

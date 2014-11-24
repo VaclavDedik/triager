@@ -11,8 +11,7 @@ class AbstractKernel(object):
         :returns: Matrix.
         """
 
-        raise NotImplementedError(
-            "Method %s#compute not implemented." % self.__class__.__name__)
+        raise NotImplementedError()
 
 
 class GaussianKernel(AbstractKernel):
