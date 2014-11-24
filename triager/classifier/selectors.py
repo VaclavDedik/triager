@@ -39,17 +39,8 @@ class AbstractSelector(object):
         :returns: Feature vector.
         """
 
-        x = []
-        word_counts = utils.count_words(
-            "%s\n%s" % (document.title, document.content))
-
-        for word in self.features:
-            if word in word_counts:
-                x.append(word_counts[word])
-            else:
-                x.append(0)
-
-        return x
+        raise NotImplementedError(
+            "Method %s#get_x not implemented." % self.__class__.__name__)
 
     def get_label(self, y):
         """Returns string representation of label for integer representation.
@@ -84,6 +75,23 @@ class BasicSelector(AbstractSelector):
             Y.append(y)
 
         return np.array(X), np.transpose([Y])
+
+    def get_x(self, document):
+        """Counts words in provided document (both in title and content
+        together) that occur in the field ``features``.
+        """
+
+        x = []
+        word_counts = utils.count_words(
+            "%s\n%s" % (document.title, document.content))
+
+        for word in self.features:
+            if word in word_counts:
+                x.append(word_counts[word])
+            else:
+                x.append(0)
+
+        return x
 
     def _build_features(self, documents):
         """Concatenates all document titles and content together and creates
@@ -128,6 +136,12 @@ class SelectorDecorator(AbstractSelector):
         self.labels = list(self.selector.labels)
         return X, Y
 
+    def get_x(self, document):
+        return self.selector.get_x(document)
+
+    def get_label(self, y):
+        return self.selector.get_label(y)
+
 
 class StandardizationDecorator(SelectorDecorator):
     """Performs Standardization on data by subtracting the mean of each
@@ -171,39 +185,40 @@ class StopWordsDecorator(SelectorDecorator):
         X_wsw = np.delete(X, remove_lst, axis=1)
         return X_wsw, Y
 
+    def get_x(self, document):
+        x_old = super(StopWordsDecorator, self).get_x(document)
+        x = []
+        for i, word in enumerate(self.selector.features):
+            if word in self.features:
+                x.append(x_old[i])
+        return x
 
-# TODO: Fix this class
+
 class TFIDFDecorator(SelectorDecorator):
     """Implementation of TF-IDF weighing.
     """
 
     def get_x(self, document):
-        x_counts = self.selector.get_x(document)
-        x = []
-        for i, word in enumerate(self.features):
-            x.append(x_counts[i] * self.word_idfs[word])
+        x = super(TFIDFDecorator, self).get_x(document)
+        return self._tfidf(x)
 
-        return x
+    def build(self, documents):
+        X, Y = super(TFIDFDecorator, self).build(documents)
 
-    def _build_features(self, documents):
-        self.selector._build_features(documents)
-        self.features = self.selector.features
+        N = len(X)
+        fs_d = sum(X > 0)
+        self.idfs = np.log(float(N) / fs_d)
 
-        word_fs = {}
-        for doc in documents:
-            counts = utils.count_words(doc.title + " " + doc.content)
-            for word, _ in counts.iteritems():
-                if word in word_fs:
-                    word_fs[word] += 1
-                else:
-                    word_fs[word] = 1
+        # Method _tfidf can be used on 2D objects if input X is transposed
+        # and self.idfs is a column vector
+        self.idfs = np.transpose([self.idfs])
+        X_tfidf = np.transpose(self._tfidf(np.transpose(X)))
+        self.idfs = np.concatenate(self.idfs)
 
-        word_idfs = {}
-        for word in self.features:
-            if word_fs[word]:
-                idf = np.log(len(documents)/float(word_fs[word]))
-            else:
-                idf = 0
-            word_idfs[word] = idf
+        return X_tfidf, Y
 
-        self.word_idfs = word_idfs
+    def _tfidf(self, x):
+        n = sum(x)
+        x_new = (x / np.array(n, dtype=float)) * self.idfs
+
+        return x_new
