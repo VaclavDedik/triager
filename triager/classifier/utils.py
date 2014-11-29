@@ -14,3 +14,20 @@ def count_words(text):
             word_counts[word] = 1
 
     return word_counts
+
+
+def filter_docs(documents, min_class_occur=1):
+    """Filters documents that don't satisfy minimum number of classes
+    condition.
+    """
+
+    occurrences = {}
+    for doc in documents:
+        if doc.label in occurrences:
+            occurrences[doc.label] += 1
+        else:
+            occurrences[doc.label] = 1
+    filtered_docs = filter(
+        lambda d: occurrences[d.label] >= min_class_occur, documents)
+
+    return filtered_docs

@@ -57,23 +57,18 @@ class BasicSelector(AbstractSelector):
     simply counting the number of words.
     """
 
-    def __init__(self, min_len=1, min_f_occur=1, min_c_occur=1):
+    def __init__(self, min_len=1, min_occur=1):
         """Initialize basic selector with given parameters.
 
         :param min_len: Minimal length of a word to be included as a feature.
-        :param min_f_occur: Minimum number of a word occurrences to be included
-                            as a feature.
-        :param min_c_occur: Minimum number of a class occurrences to be
-                            included as a class.
+        :param min_occur: Minimum number of a word occurrences to be included
+                          as a feature.
         """
 
         self.min_len = min_len
-        self.min_f_occur = min_f_occur
-        self.min_c_occur = min_c_occur
+        self.min_occur = min_occur
 
     def build(self, documents):
-        if self.min_c_occur > 1:
-            documents = self._filter_documents(documents)
         self._build_labels(documents)
         self._build_features(documents)
         X, Y = [], []
@@ -117,7 +112,7 @@ class BasicSelector(AbstractSelector):
 
         words = sorted(
             [w for w, c in utils.count_words(consolidated).iteritems()
-             if c >= self.min_f_occur])
+             if c >= self.min_occur])
         words = [w for w in words if len(w) >= self.min_len]
         self.features = words
 
@@ -130,22 +125,6 @@ class BasicSelector(AbstractSelector):
 
         labels = {document.label for document in documents}
         self.labels = sorted(labels)
-
-    def _filter_documents(self, documents):
-        """Removes documents that don't satisfy minimum number of classes
-        condition.
-        """
-
-        occurrences = {}
-        for doc in documents:
-            if doc.label in occurrences:
-                occurrences[doc.label] += 1
-            else:
-                occurrences[doc.label] = 1
-        filtered_docs = filter(
-            lambda d: occurrences[d.label] >= self.min_c_occur, documents)
-
-        return filtered_docs
 
 
 class SelectorDecorator(AbstractSelector):
