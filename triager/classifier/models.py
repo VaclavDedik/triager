@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn import naive_bayes
 from sklearn import svm
 
 from kernels import GaussianKernel
@@ -53,21 +54,13 @@ class NaiveBayesModel(AbstractModel):
 
     def train(self, documents):
         X, Y = self.feature_selector.build(documents)
-        P_Y = np.bincount(np.concatenate(Y))
-        P_Y = P_Y/float(P_Y.size)
-        P_XY = []
-        for i in range(P_Y.size):
-            P_XY_i = np.sum(X * (Y == i), axis=0) / P_Y[i]
-            P_XY.append(P_XY_i)
-
-        self.prior = np.transpose([P_Y])
-        self.likelihood = np.array(P_XY)
+        nb = naive_bayes.GaussianNB()
+        nb.fit(X, np.concatenate(Y))
+        self.nb = nb
 
     def predict(self, document):
         x = self.feature_selector.get_x(document)
-        predictions = self.prior * np.transpose(
-            [np.product(self.likelihood ** x, axis=1)])
-        y = np.argmax(predictions)
+        y = self.nb.predict(x)
         label = self.feature_selector.get_label(y)
 
         return label
