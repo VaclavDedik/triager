@@ -180,15 +180,13 @@ class StopWordsDecorator(SelectorDecorator):
                 new_features.append(word)
 
         self.features = new_features
+        self.remove_lst = remove_lst
         X_wsw = np.delete(X, remove_lst, axis=1)
         return X_wsw, Y
 
     def get_x(self, document):
         x_old = super(StopWordsDecorator, self).get_x(document)
-        x = []
-        for i, word in enumerate(self.selector.features):
-            if word in self.features:
-                x.append(x_old[i])
+        x = np.delete(x_old, self.remove_lst)
         return x
 
 
@@ -210,13 +208,17 @@ class TFIDFDecorator(SelectorDecorator):
         # Method _tfidf can be used on 2D objects if input X is transposed
         # and self.idfs is a column vector
         self.idfs = np.transpose([self.idfs])
-        X_tfidf = np.transpose(self._tfidf(np.transpose(X)))
+        X_tfidf = self._tfidf(X.T).T
         self.idfs = np.concatenate(self.idfs)
 
         return X_tfidf, Y
 
     def _tfidf(self, x):
-        n = sum(x)
-        x_new = (x / np.array(n, dtype=float)) * self.idfs
+        """Implementation of augumented term frequency to prevent a bias
+        towards longer documents.
+        """
+
+        n = np.max(x, axis=0)
+        x_new = (((x * 0.5) / np.array(n, dtype=float)) + 0.5) * self.idfs
 
         return x_new
