@@ -17,13 +17,15 @@ def main():
     # Create model
     selector = selectors.TFIDFDecorator(selectors.StopWordsDecorator(
         selectors.BasicSelector(min_c_occur=30)))
-    kernel = kernels.LinearKernel()
-    model = models.SVMModel(feature_selector=selector, kernel=kernel, C=0.1)
+    kernel = kernels.GaussianKernel()
+    model = models.SVMModel(feature_selector=selector, kernel=kernel, C=180)
     print "Created model %s, using feature selector %s." \
         % (model.__class__.__name__, model.feature_selector.__class__.__name__)
     # Train model
     print "Training model..."
     model.train(docs_train)
+    print "Number of instances: %s, number of classes: %s" \
+        % (len(model._X), len(model.feature_selector.labels))
     # Test model
     docs_train = [doc for doc in docs_train  # remove docs w/o label in model
                   if doc.label in model.feature_selector.labels]
