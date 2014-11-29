@@ -15,9 +15,10 @@ def main():
     docs_train = documents[:1500]
     docs_cv = documents[1500:]
     # Create model
-    selector = selectors.StopWordsDecorator(selectors.BasicSelector())
-    kernel = kernels.GaussianKernel()
-    model = models.SVMModel(feature_selector=selector, kernel=kernel, C=35)
+    selector = selectors.TFIDFDecorator(
+        selectors.StopWordsDecorator(selectors.BasicSelector()))
+    kernel = kernels.LinearKernel()
+    model = models.SVMModel(feature_selector=selector, kernel=kernel, C=1)
     print "Created model %s, using feature selector %s." \
         % (model.__class__.__name__, model.feature_selector.__class__.__name__)
     # Train model

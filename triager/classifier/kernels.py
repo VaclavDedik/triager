@@ -1,17 +1,42 @@
+import numpy as np
+
 
 class AbstractKernel(object):
     """Defines interface of Kernel class."""
 
-    def compute(self, X, Y):
-        """Computation of the value of the kernel.
+    def compute(self, x, x0):
+        """Computation of the similarity value of the kernel.
 
-        :param X: Matrix where rows represent instancies and columns represent
-                  features.
-        :param Y: Labels.
-        :returns: Matrix.
+        :param x: Represents an instance of X.
+        :param x0: Represents another instance of X.
+        :returns: Similarity value of the instances.
         """
 
         raise NotImplementedError()
+
+
+class LinearKernel(AbstractKernel):
+    """Computes linear similarity value."""
+
+    def __init__(self):
+        self.sklearn_name = "linear"
+        self.sklearn_params = {}
+
+    def compute(self, x, x0):
+        return np.dot(x, np.transpose([x0]))
+
+
+class PolynomialKernel(AbstractKernel):
+    """computes polynomial similarity value."""
+
+    def __init__(self, r=1, d=1):
+        self.r = r
+        self.d = d
+        self.sklearn_name = "poly"
+        self.sklearn_params = {"degree": self.d, "coef0": self.r}
+
+    def compute(self, x, x0):
+        return (self.gamma * np.dot(x, np.transpose([x0])) + self.r) ** self.d
 
 
 class GaussianKernel(AbstractKernel):
