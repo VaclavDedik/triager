@@ -8,7 +8,7 @@ from triager import parsers
 
 def main():
     # Parse MRS data into documents
-    parser = parsers.MRSParser("data/unify/MRs/")
+    parser = parsers.MRSParser("data/unify/MRs/", project_match="OPW.*")
     print "Parsing data from %s..." % parser.folder
     documents = parser.parse()
     # Filter unlabeled documents and documents that are not labeled with

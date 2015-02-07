@@ -15,8 +15,9 @@ class MRSParser(DocumentParser):
     ``Document`` object.
     """
 
-    def __init__(self, folder):
+    def __init__(self, folder, project_match=".*"):
         self.folder = folder
+        self.project_match = project_match
 
     def parse(self):
         """Parses data from given folder into list of documents.
@@ -31,7 +32,7 @@ class MRSParser(DocumentParser):
             if f not in ['.DS_Store']:  # excluded files
                 full_f = os.path.join(self.folder, f)
                 ticket_info = self._parse_file(full_f)
-                if ticket_info:
+                if ticket_info and re.match(self.project_match, ticket_info[3]):
                     if ticket_info[2] == "Unassigned":
                         ticket_info[2] = None
                     document = Document(
@@ -45,7 +46,7 @@ class MRSParser(DocumentParser):
             content = f.readlines()
             content = [line.rstrip() for line in content]
 
-        ticket_info = [None, "", None]
+        ticket_info = [None, "", None, ""]
         ticket_id = os.path.basename(fname).replace(".html", "")
         description_stage = 0
         is_bug = False
@@ -57,6 +58,11 @@ class MRSParser(DocumentParser):
             summary_match = re.match("^\| " + ticket_id + " : (.*)\|$", line)
             if summary_match and not ticket_info[0]:
                 ticket_info[0] = summary_match.group(1).strip()
+
+            # get project
+            project_match = re.match("^\| Found In:   ([\w]+)", line)
+            if project_match and not ticket_info[3]:
+                ticket_info[3] = project_match.group(1).strip()
 
             # test if is bug
             if not is_bug and re.match("\| Created:", line) \
