@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import numpy as np
+import random
 
 from triager.classifier import models, kernels, selectors, tests, utils
 from triager import parsers
@@ -12,6 +13,8 @@ def main():
     #parser = parsers.BugzillaParser("data/opensource/mozilla_firefox")
     print "Parsing data from %s..." % parser.folder
     documents = parser.parse()
+    # Shuffle documents
+    random.shuffle(documents)
     # Filter unlabeled documents and documents that are not labeled with
     # a class that occurs at lest `min_class_occur`
     documents = [doc for doc in documents if doc.label]
