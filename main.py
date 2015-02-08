@@ -7,8 +7,9 @@ from triager import parsers
 
 
 def main():
-    # Parse MRS data into documents
+    # Parse data into documents
     parser = parsers.MRSParser("data/unify/MRs/", project_match="OPW.*")
+    #parser = parsers.BugzillaParser("data/opensource/mozilla_firefox")
     print "Parsing data from %s..." % parser.folder
     documents = parser.parse()
     # Filter unlabeled documents and documents that are not labeled with
@@ -32,14 +33,23 @@ def main():
     print "Training model on %s instances..." % len(docs_train)
     model.train(docs_train)
     print "Number of classes is: %s" % len(model.feature_selector.labels)
-    # Test model
+
+    # Test model (accuracy)
     print "Computing accuracy for train set (size=%s)..." % len(docs_train)
     accuracy_train = tests.accuracy(model, docs_train)
     print "Computing accuracy for CV set (size=%s)..." % len(docs_cv)
     accuracy_cv = tests.accuracy(model, docs_cv)
-
     print "Accuracy of train set is: '%.4f'." % accuracy_train
     print "Accuracy of CV set is: '%.4f'." % accuracy_cv
+    # Test model (precision and recall)
+    print "Computing average precision and recall for train set..."
+    pr_train = tests.precision_and_recall(model, docs_train)
+    print "Computing average precision and recall for CV set..."
+    pr_cv = tests.precision_and_recall(model, docs_cv)
+    print "Average precision and recall of train set is: '%.4f' and '%.4f'." \
+        % pr_train
+    print "Average precision and recall of CV set is: '%.4f' and '%.4f'." \
+        % pr_cv
 
 if __name__ == "__main__":
     main()
