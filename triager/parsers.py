@@ -1,6 +1,7 @@
 import os
 import re
 import logging
+import json
 
 from classifier.document import Document
 from classifier.parsers import DocumentParser
@@ -32,7 +33,8 @@ class MRSParser(DocumentParser):
             if f not in ['.DS_Store']:  # excluded files
                 full_f = os.path.join(self.folder, f)
                 ticket_info = self._parse_file(full_f)
-                if ticket_info and re.match(self.project_match, ticket_info[3]):
+                if ticket_info and re.match(
+                        self.project_match, ticket_info[3]):
                     if ticket_info[2] == "Unassigned":
                         ticket_info[2] = None
                     document = Document(
@@ -103,3 +105,38 @@ class MRSParser(DocumentParser):
             logging.warn("Could not parse assignee from ticket %s", ticket_id)
 
         return ticket_info
+
+
+class BugzillaParser(DocumentParser):
+    """Parser for bugzilla bugs, e.g. Mozilla, Red Hat etc."""
+
+    BUGS_FILE = "bugs"
+    COMMENTS_FILE = "latest_comments"
+
+    def __init__(self, folder):
+        """Specify folder that contains two files, 'bugs' and 'latest_comments.
+        """
+
+        self.folder = folder
+
+    def parse(self):
+        bugsfn = os.path.join(self.folder, self.BUGS_FILE)
+        commentsfn = os.path.join(self.folder, self.COMMENTS_FILE)
+
+        with open(bugsfn, "r") as bugsf:
+            bugs_raw = bugsf.read()
+        with open(commentsfn, "r") as commentsf:
+            comments_raw = commentsf.read()
+
+        bugs = json.loads(bugs_raw)["bugs"]
+        comments = json.loads(comments_raw)
+
+        documents = []
+        for bug in bugs:
+            title = bug["summary"]
+            description = comments[str(bug["id"])]["comments"]["text"]
+            label = bug["assigned_to"]
+            document = Document(title, description, label)
+            documents.append(document)
+
+        return documents
