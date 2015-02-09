@@ -4,7 +4,7 @@ import logging
 import json
 
 from classifier.document import Document
-from classifier.parsers import DocumentParser
+from classifier.parsers import DocumentParser, Label
 
 
 class MRSParser(DocumentParser):
@@ -113,15 +113,21 @@ class BugzillaParser(DocumentParser):
     BUGS_FILE = "bugs"
     COMMENTS_FILE = "latest_comments"
 
-    def __init__(self, folder):
+    def __init__(self, folder, label=Label.ASSIGNEE):
         """Specify folder that contains two files, 'bugs' and 'latest_comments.
         """
 
         self.folder = folder
+        self.label = label
 
     def parse(self):
         bugsfn = os.path.join(self.folder, self.BUGS_FILE)
         commentsfn = os.path.join(self.folder, self.COMMENTS_FILE)
+
+        if self.label == Label.ASSIGNEE:
+            label_field = "assigned_to"
+        elif self.label == Label.COMPONENT:
+            label_field = "component"
 
         with open(bugsfn, "r") as bugsf:
             bugs_raw = bugsf.read()
@@ -135,7 +141,7 @@ class BugzillaParser(DocumentParser):
         for bug in bugs:
             title = bug["summary"]
             description = comments[str(bug["id"])]["comments"]["text"]
-            label = bug["assigned_to"]
+            label = bug[label_field]
             document = Document(title, description, label)
             documents.append(document)
 

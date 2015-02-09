@@ -4,13 +4,15 @@ import numpy as np
 import random
 
 from triager.classifier import models, kernels, selectors, tests, utils
+from triager.classifier.parsers import Label
 from triager import parsers
 
 
 def main():
     # Parse data into documents
-    parser = parsers.MRSParser("data/unify/MRs/", project_match="OPW.*")
-    #parser = parsers.BugzillaParser("data/opensource/mozilla_firefox")
+    #parser = parsers.MRSParser("data/unify/MRs/", project_match="OPW.*")
+    parser = parsers.BugzillaParser("data/opensource/mozilla_firefox",
+                                    label=Label.COMPONENT)
     print "Parsing data from %s..." % parser.folder
     documents = parser.parse()
     # Shuffle documents

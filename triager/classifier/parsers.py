@@ -1,4 +1,12 @@
 
+class Label(object):
+    """Represents label choice. It is supposed to be set in the parser's
+    initializer."""
+
+    ASSIGNEE = "assignee"
+    COMPONENT = "component"
+
+
 class DocumentParser(object):
     """When implementing a subclass of this class, you are expected to override
     method ``parse``. All parameters that the parse method might need should
