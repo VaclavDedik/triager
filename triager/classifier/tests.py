@@ -9,7 +9,13 @@ def accuracy(model, documents_cv):
     return tpn/float(n_cv)
 
 
-def precision_and_recall(model, documents_cv, avg=True):
+def precision_and_recall(model, documents_cv):
+    """Computes macro average precision and recall.
+
+    :param model: Prediction model.
+    :param documents_cv: List of documents.
+    """
+
     labels = model.feature_selector.labels
     n_c = len(labels)
     tpi = np.zeros(n_c)
@@ -31,10 +37,7 @@ def precision_and_recall(model, documents_cv, avg=True):
 
     precisioni = tpi/(tpi+fpi)
     recalli = tpi/(tpi+fni)
+    precision = sum(precisioni)/n_c
+    recall = sum(recalli)/n_c
 
-    if not avg:
-        return (precisioni, recalli)
-    else:
-        precision = sum(precisioni)/n_c
-        recall = sum(recalli)/n_c
-        return (precision, recall)
+    return (precision, recall)

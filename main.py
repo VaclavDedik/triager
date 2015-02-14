@@ -47,9 +47,9 @@ def main():
     print "Accuracy of train set is: '%.4f'." % accuracy_train
     print "Accuracy of CV set is: '%.4f'." % accuracy_cv
     # Test model (precision and recall)
-    print "Computing average precision and recall for train set..."
+    print "Computing macro-average precision and recall for train set..."
     pr_train = tests.precision_and_recall(model, docs_train)
-    print "Computing average precision and recall for CV set..."
+    print "Computing macro-average precision and recall for CV set..."
     pr_cv = tests.precision_and_recall(model, docs_cv)
     print "Average precision and recall of train set is: '%.4f' and '%.4f'." \
         % pr_train
@@ -58,3 +58,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    print ""
