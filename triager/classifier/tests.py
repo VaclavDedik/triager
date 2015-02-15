@@ -22,7 +22,12 @@ def precision_and_recall(model, documents_cv):
     :param documents_cv: List of documents.
     """
 
-    labels = model.feature_selector.labels
+    labels = list(model.feature_selector.labels)
+    # If there are labels that are not in the train set
+    for document in documents_cv:
+        if document.label not in labels:
+            labels.append(document.label)
+
     n_c = len(labels)
     tpi = np.zeros(n_c)
     fpi = np.zeros(n_c)
