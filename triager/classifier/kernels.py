@@ -25,6 +25,9 @@ class LinearKernel(AbstractKernel):
     def compute(self, x, x0):
         return np.dot(x, np.transpose([x0]))
 
+    def __str__(self):
+        return "LinearKernel()"
+
 
 class PolynomialKernel(AbstractKernel):
     """computes polynomial similarity value."""
@@ -38,6 +41,9 @@ class PolynomialKernel(AbstractKernel):
     def compute(self, x, x0):
         return (self.gamma * np.dot(x, np.transpose([x0])) + self.r) ** self.d
 
+    def __str__(self):
+        return "PolynomialKernel(r=%s, d=%s)" % (self.r, self.d)
+
 
 class GaussianKernel(AbstractKernel):
     """Computes gaussian kernel. This class only works with scikit-learn,
@@ -48,3 +54,6 @@ class GaussianKernel(AbstractKernel):
         self.gamma = gamma
         self.sklearn_name = "rbf"
         self.sklearn_params = {"gamma": self.gamma}
+
+    def __str__(self):
+        return "GaussianKernel(gamma=%s)" % self.gamma

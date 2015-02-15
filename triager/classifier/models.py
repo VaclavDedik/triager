@@ -67,6 +67,10 @@ class NaiveBayesModel(AbstractModel):
 
         return labels[:n]
 
+    def __str__(self):
+        return "NaiveBayesModel(feature_selector=%s)" \
+            % self.feature_selector
+
 
 class SVMModel(AbstractModel):
     """Support Vector Machine model."""
@@ -93,3 +97,7 @@ class SVMModel(AbstractModel):
         labels = map(self.feature_selector.get_label, Y)
 
         return labels[:n]
+
+    def __str__(self):
+        return "SVMModel(feature_selector=%s, kernel=%s, C=%s)" \
+            % (self.feature_selector, self.kernel, self.C)

@@ -13,14 +13,18 @@ def main():
     #parser = parsers.MRSParser("data/unify/MRs/", project_match="OPW.*")
     parser = parsers.BugzillaParser("data/opensource/mozilla_firefox",
                                     label=Label.COMPONENT)
-    print "Parsing data from %s..." % parser.folder
+    print "Parsing data by parser: %s" % parser
     documents = parser.parse()
     # Shuffle documents
     random.shuffle(documents)
     # Filter unlabeled documents and documents that are not labeled with
     # a class that occurs at lest `min_class_occur`
     documents = [doc for doc in documents if doc.label]
-    documents = utils.filter_docs(documents, min_class_occur=30)
+    print "Filtering unlabeled documents..."
+    min_class_occur = 30
+    documents = utils.filter_docs(documents, min_class_occur=min_class_occur)
+    print "Filtering documents labeled by class that occurs less than " \
+        + "%s times." % min_class_occur
     # Split between train and cv data
     n = len(documents)
     split_pct = 7/10.0
@@ -32,8 +36,7 @@ def main():
         selectors.BasicSelector()))
     kernel = kernels.GaussianKernel()
     model = models.SVMModel(feature_selector=selector, kernel=kernel, C=240)
-    print "Created model %s, using feature selector %s." \
-        % (model.__class__.__name__, model.feature_selector.__class__.__name__)
+    print "Created model: %s." % model
     # Train model
     print "Training model on %s instances..." % len(docs_train)
     model.train(docs_train)
@@ -57,5 +60,9 @@ def main():
         % pr_cv
 
 if __name__ == "__main__":
-    main()
-    print ""
+    try:
+        main()
+    except KeyboardInterrupt as e:
+        pass
+    finally:
+        print "----------"

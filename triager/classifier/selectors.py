@@ -126,6 +126,10 @@ class BasicSelector(AbstractSelector):
         labels = {document.label for document in documents}
         self.labels = sorted(labels)
 
+    def __str__(self):
+        return "BasicSelector(min_len=%s, min_occur=%s)" \
+            % (self.min_len, self.min_occur)
+
 
 class SelectorDecorator(AbstractSelector):
     """Selector decorator allows us to layer more selectors on top of each
@@ -147,6 +151,9 @@ class SelectorDecorator(AbstractSelector):
     def get_label(self, y):
         return self.selector.get_label(y)
 
+    def __str__(self):
+        return "->%s" % self.selector
+
 
 class StandardizationDecorator(SelectorDecorator):
     """Performs Standardization on data by subtracting the mean of each
@@ -165,6 +172,10 @@ class StandardizationDecorator(SelectorDecorator):
     def get_x(self, document):
         x = super(StandardizationDecorator, self).get_x(document)
         return (x - self.m)/self.std
+
+    def __str__(self):
+        return "StandardizationDecorator()%s" \
+            % super(StandardizationDecorator, self).__str__()
 
 
 class StopWordsDecorator(SelectorDecorator):
@@ -195,6 +206,10 @@ class StopWordsDecorator(SelectorDecorator):
         x_old = super(StopWordsDecorator, self).get_x(document)
         x = np.delete(x_old, self.remove_lst)
         return x
+
+    def __str__(self):
+        return "StopWordsDecorator(language='%s')%s" \
+            % (self.language, super(StopWordsDecorator, self).__str__())
 
 
 class TFIDFDecorator(SelectorDecorator):
@@ -229,3 +244,7 @@ class TFIDFDecorator(SelectorDecorator):
         x_new = (((x * 0.5) / np.array(n, dtype=float)) + 0.5) * self.idfs
 
         return x_new
+
+    def __str__(self):
+        return "TFIDFDecorator()%s" \
+            % super(TFIDFDecorator, self).__str__()

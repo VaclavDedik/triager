@@ -106,6 +106,10 @@ class MRSParser(DocumentParser):
 
         return ticket_info
 
+    def __str__(self):
+        return "MRSParser(folder='%s', project_match='%s')" \
+            % (self.folder, self.project_match)
+
 
 class BugzillaParser(DocumentParser):
     """Parser for bugzilla bugs, e.g. Mozilla, Red Hat etc."""
@@ -146,3 +150,7 @@ class BugzillaParser(DocumentParser):
             documents.append(document)
 
         return documents
+
+    def __str__(self):
+        return "BugzillaParser(folder='%s', label='%s')" \
+            % (self.folder, self.label)
