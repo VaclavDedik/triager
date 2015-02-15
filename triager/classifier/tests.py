@@ -1,10 +1,16 @@
 import numpy as np
 
 
-def accuracy(model, documents_cv):
+def accuracy(model, documents_cv, n=1):
+    """Computes accuracy of the model.
+
+    :param model: Prediction model.
+    :param documents_cv: List of documents.
+    :param n: Number of "suggested" options.
+    """
     n_cv = len(documents_cv)
     tpn = sum([1 for i in range(n_cv)
-              if documents_cv[i].label == model.predict(documents_cv[i])])
+              if documents_cv[i].label in model.predict(documents_cv[i], n=n)])
 
     return tpn/float(n_cv)
 
@@ -23,7 +29,7 @@ def precision_and_recall(model, documents_cv):
     fni = np.zeros(n_c)
 
     for document in documents_cv:
-        plabel = model.predict(document)
+        plabel = model.predict(document)[0]
         if document.label == plabel:
             tpi[labels.index(document.label)] += 1
         else:

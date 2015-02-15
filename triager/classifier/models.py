@@ -33,12 +33,13 @@ class AbstractModel(object):
 
         raise NotImplementedError()
 
-    def predict(self, document):
-        """Predicts label for given document.
+    def predict(self, document, n=1):
+        """Predicts label(s) for given document.
         Note that before running this method, method ``train`` must be run.
 
         :param document: Document to be labeled.
-        :returns: Predicted label of the document.
+        :param n: Number of predictions, 1 by default.
+        :returns: Predicted label(s) of the document in descending order.
         """
 
         raise NotImplementedError()
@@ -58,12 +59,13 @@ class NaiveBayesModel(AbstractModel):
         nb.fit(X, np.concatenate(Y))
         self.nb = nb
 
-    def predict(self, document):
+    def predict(self, document, n=1):
         x = self.feature_selector.get_x(document)
-        y = self.nb.predict(x)
-        label = self.feature_selector.get_label(y)
+        probs = self.nb.predict_proba([x])[0]
+        Y = probs.argsort()[::-1]
+        labels = map(self.feature_selector.get_label, Y)
 
-        return label
+        return labels[:n]
 
 
 class SVMModel(AbstractModel):
@@ -79,14 +81,15 @@ class SVMModel(AbstractModel):
         self._X, self._Y = X, Y
         if hasattr(self.kernel, 'sklearn_name'):
             self.svm = svm.SVC(C=self.C, kernel=self.kernel.sklearn_name,
-                               **self.kernel.sklearn_params)
+                               probability=True, **self.kernel.sklearn_params)
         else:
             self.svm = svm.SVC(C=self.C, kernel=self.kernel.compute)
         self.svm.fit(X, np.concatenate(Y))
 
-    def predict(self, document):
+    def predict(self, document, n=1):
         x = self.feature_selector.get_x(document)
-        y = self.svm.predict([x])
-        label = self.feature_selector.get_label(y)
+        probs = self.svm.predict_proba([x])[0]
+        Y = probs.argsort()[::-1]
+        labels = map(self.feature_selector.get_label, Y)
 
-        return label
+        return labels[:n]
