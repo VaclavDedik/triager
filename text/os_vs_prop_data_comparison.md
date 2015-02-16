@@ -7,21 +7,27 @@ I divided the data by ratio of 7:10 for simple cross-validation and the metrics 
 ## Results
 
 ![Accuracy of NB model](img/prop_vs_os/nb_accuracy.png)
+
 First graph represents accuracy of the Naive Bayes model. You can already see that the open source data perform better than the proprietary data. Accuracy of the classifier is **35 %** vs **24 %** when *x* (see above) is set to 30. In following text, I will always compare results of this setting of parameter *x* as I believe that is the most probable production value for the given size of the dataset at this point.
 
 ![Precision of NB model](img/prop_vs_os/nb_precision.png)
+
 Second graph is a representation of precision of the same model. Precision of the classifier is **46 %** and **22 %** for the open source and proprietary data, respectively.
 
 ![Recall of NB model](img/prop_vs_os/nb_recall.png)
+
 This graph shows recall of the Naive Bayes model. Recall value is **29 %** for the open source data and **19 %** for the proprietary data.
 
 ![Accuracy of SVM model](img/prop_vs_os/svm_accuracy.png)
+
 Fourth graph visualizes accuracy of the second model (SVM). Even with this model, the open source data perform much better with accuracy value of **54 %** vs **33 %** of the proprietary data.
 
 ![Precision of SVM model](img/prop_vs_os/svm_precision.png)
+
 Precision of the SVM model is pictured on this graph. It again clearly shows that the precision value of the open source data is higher (again about **54 %**) than the precision value of the proprietary data (**32 %**).
 
 ![Recall of SVM model](img/prop_vs_os/svm_recall.png)
+
 Last graph shows the recall of the same model. On the open source data, the classifier achieved recall value of **49 %** and on the proprietary data **26 %**.
 
 ## Conclusion
