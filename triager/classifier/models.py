@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn import naive_bayes
-from sklearn import svm
+from sklearn import svm, tree
 
 from kernels import GaussianKernel
 
@@ -101,3 +101,26 @@ class SVMModel(AbstractModel):
     def __str__(self):
         return "SVMModel(feature_selector=%s, kernel=%s, C=%s)" \
             % (self.feature_selector, self.kernel, self.C)
+
+
+class CARTModel(AbstractModel):
+    "Decision Tree Model using CART algorithm."
+
+    def __init__(self, feature_selector):
+        super(CARTModel, self).__init__(feature_selector)
+
+    def train(self, documents):
+        X, Y = self.feature_selector.build(documents)
+        self.clf = tree.DecisionTreeClassifier()
+        self.clf.fit(X, np.concatenate(Y))
+
+    def predict(self, document, n=1):
+        x = self.feature_selector.get_x(document)
+        probs = self.clf.predict_proba([x])[0]
+        Y = probs.argsort()[::-1]
+        labels = map(self.feature_selector.get_label, Y)
+
+        return labels[:n]
+
+    def __str__(self):
+        return "CARTModel(feature_selector=%s)" % self.feature_selector
