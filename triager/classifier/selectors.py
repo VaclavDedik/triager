@@ -96,7 +96,7 @@ class BasicSelector(AbstractSelector):
             else:
                 x.append(0)
 
-        return x
+        return np.array(x)
 
     def _build_features(self, documents):
         """Concatenates all document titles and content together and creates
@@ -165,9 +165,9 @@ class StandardizationDecorator(SelectorDecorator):
         n = len(X)
         self.m = np.sum(X, axis=0)/float(n)
         self.std = np.std(X, axis=0, ddof=1)
-        X_norm = (X - self.m)/self.std
+        X_std = (X - self.m)/self.std
 
-        return X_norm, Y
+        return X_std, Y
 
     def get_x(self, document):
         x = super(StandardizationDecorator, self).get_x(document)
@@ -176,6 +176,26 @@ class StandardizationDecorator(SelectorDecorator):
     def __str__(self):
         return "StandardizationDecorator()%s" \
             % super(StandardizationDecorator, self).__str__()
+
+
+class NormalizationDecorator(SelectorDecorator):
+    """Scales all features to unit length."""
+
+    def build(self, documents):
+        X, Y = super(NormalizationDecorator, self).build(documents)
+        norm = np.sqrt(np.sum(X ** 2, axis=1))
+        X_norm = X/np.transpose([norm])
+        return X_norm, Y
+
+    def get_x(self, document):
+        x = super(NormalizationDecorator, self).get_x(document)
+        norm = np.sqrt(np.sum(x ** 2))
+        x_norm = x/norm
+        return x_norm
+
+    def __str__(self):
+        return "NormalizationDecorator()%s" \
+            % super(NormalizationDecorator, self).__str__()
 
 
 class StopWordsDecorator(SelectorDecorator):
