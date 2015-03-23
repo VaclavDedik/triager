@@ -1,6 +1,7 @@
 import numpy as np
 
 from nltk.corpus import stopwords
+from sklearn.decomposition import TruncatedSVD
 
 import utils
 
@@ -268,3 +269,26 @@ class TFIDFDecorator(SelectorDecorator):
     def __str__(self):
         return "TFIDFDecorator()%s" \
             % super(TFIDFDecorator, self).__str__()
+
+
+class LSIDecorator(SelectorDecorator):
+    """Implementation of a Latent Semantic Indexing feature selector."""
+
+    def __init__(self, selector, k=500):
+        super(LSIDecorator, self).__init__(selector)
+        self.k = k
+
+    def get_x(self, document):
+        x = super(LSIDecorator, self).get_x(document)
+        return self.svd.transform(x)[0]
+
+    def build(self, documents):
+        X, Y = super(LSIDecorator, self).build(documents)
+        self.svd = TruncatedSVD(n_components=self.k)
+        self.svd.fit(X)
+
+        return self.svd.transform(X), Y
+
+    def __str__(self):
+        return "LSIDecorator(k=%s)%s" \
+            % (self.k, super(LSIDecorator, self).__str__())
