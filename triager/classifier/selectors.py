@@ -284,7 +284,7 @@ class LSIDecorator(SelectorDecorator):
 
     def build(self, documents):
         X, Y = super(LSIDecorator, self).build(documents)
-        self.svd = TruncatedSVD(n_components=self.k)
+        self.svd = TruncatedSVD(n_components=self.k, random_state=42)
         self.svd.fit(X)
 
         return self.svd.transform(X), Y
