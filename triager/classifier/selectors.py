@@ -2,6 +2,7 @@ import numpy as np
 
 from nltk.corpus import stopwords
 from sklearn.decomposition import TruncatedSVD
+from sklearn import feature_selection
 
 import utils
 
@@ -292,3 +293,30 @@ class LSIDecorator(SelectorDecorator):
     def __str__(self):
         return "LSIDecorator(k=%s)%s" \
             % (self.k, super(LSIDecorator, self).__str__())
+
+
+class ChiSquaredDecorator(SelectorDecorator):
+    """Implementation of Chi-Squared feature selection."""
+
+    def __init__(self, selector, threshold=10.86):
+        super(ChiSquaredDecorator, self).__init__(selector)
+        self.threshold = threshold
+
+    def get_x(self, document):
+        x = super(ChiSquaredDecorator, self).get_x(document)
+        x_x2 = np.delete(x, self.remove_lst)
+        return x_x2
+
+    def build(self, documents):
+        X, Y = super(ChiSquaredDecorator, self).build(documents)
+        x2, pval = feature_selection.chi2(X, Y)
+
+        self.remove_lst = [
+            i for i, val in enumerate(x2) if val < self.threshold]
+        X_x2 = np.delete(X, self.remove_lst, axis=1)
+
+        return X_x2, Y
+
+    def __str__(self):
+        return "ChiSquaredDecorator(threshold=%s)%s" \
+            % (self.threshold, super(ChiSquaredDecorator, self).__str__())
