@@ -12,11 +12,13 @@ def main():
     # Parse data into documents
     #parser = parsers.MRSParser("data/unify/MRs/", project_match="OPW.*")
     parser = parsers.BugzillaParser("data/opensource/mozilla_firefox",
-                                    label=Label.COMPONENT)
+                                    label=Label.ASSIGNEE)
     print "Parsing data by parser: %s" % parser
     documents = parser.parse()
     # Shuffle documents
+    random.seed(4) # use 3 for MRS
     random.shuffle(documents)
+    random.seed()
     # Filter unlabeled documents and documents that are not labeled with
     # a class that occurs at lest `min_class_occur`
     documents = [doc for doc in documents if doc.label]
