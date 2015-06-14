@@ -11,8 +11,8 @@ from triager import parsers
 def main():
     # Parse data into documents
     #parser = parsers.MRSParser("data/unify/MRs/", project_match="OPW.*")
-    parser = parsers.BugzillaParser("data/opensource/mozilla_firefox",
-                                    label=Label.ASSIGNEE)
+    parser = parsers.CSVBugzillaParser("data/opensource/netbeans")
+    #parser = parsers.BugzillaParser("data/opensource/mozilla_firefox")
     print "Parsing data by parser: %s" % parser
     documents = parser.parse()
     # Shuffle documents

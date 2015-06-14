@@ -2,6 +2,9 @@ import os
 import re
 import logging
 import json
+import numpy as np
+
+from pandas.io.parsers import read_csv
 
 from classifier.document import Document
 from classifier.parsers import DocumentParser, Label
@@ -154,3 +157,23 @@ class BugzillaParser(DocumentParser):
     def __str__(self):
         return "BugzillaParser(folder='%s', label='%s')" \
             % (self.folder, self.label)
+
+
+class CSVBugzillaParser(DocumentParser):
+    BUGS_FILE = "bugs_with_comments.csv"
+
+    def __init__(self, folder):
+        self.folder = folder
+
+    def parse(self):
+        bugs = np.array(read_csv(os.path.join(self.folder, self.BUGS_FILE)))
+        documents = []
+
+        for bug in bugs:
+            document = Document(bug[7], str(bug[9]), bug[4])
+            documents.append(document)
+
+        return documents
+
+    def __str__(self):
+        return "CSVBugzillaParser(folder='%s')" % self.folder
