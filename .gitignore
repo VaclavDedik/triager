@@ -61,3 +61,18 @@ target/
 
 # Nohup
 nohup.out
+
+# Latex
+*.log
+*.out
+index.pdf
+*.aux
+*.tfm
+*.600pk
+*.514pk
+*.fls
+*.toc
+*.bbl
+*.blg
+*.fdb_latexmk
+*.synctex.gz

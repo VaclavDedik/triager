@@ -1,0 +1,83 @@
+\documentclass[11pt,oneside]{fithesis2}
+
+\usepackage[plainpages=false,pdfpagelabels,unicode]{hyperref}
+\usepackage[utf8]{inputenc}
+\usepackage[czech,english]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{url}
+\usepackage{blindtext}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{pdfpages}
+\usepackage{etoolbox}
+\usepackage{lipsum}
+\usepackage[marginpar]{todo}
+
+\setcounter{secnumdepth}{3}
+
+\newcommand{\faketext}[1][1]{
+    \textcolor{black!50}{\blindtext[#1]}
+    }
+
+\thesistitle{Computer-Aided Ticket Triage}
+\thesissubtitle{Master's Thesis}
+\thesisstudent{Václav Dedík}
+\thesisadvisor{Bruno Rossi, PhD}
+\thesiswoman{false}
+\thesisfaculty{fi}
+\thesisyear{Winter 2015}
+\thesislang{en}
+
+
+\setlength{\parindent}{0,5cm}
+
+\newtoggle{withofficialdesc}
+\togglefalse{withofficialdesc}
+\input{flags}
+
+\hyphenation{data-bases para-digm blue-prints}
+\begin{document}
+\FrontMatter
+\ThesisTitlePage
+\iftoggle{withofficialdesc}{\includepdf[pages={1}]{others/official-desc.pdf}}
+
+\begin{ThesisDeclaration}		
+\DeclarationText
+\AdvisorName
+\end{ThesisDeclaration}
+
+\begin{ThesisThanks}
+\lipsum[4]
+\end{ThesisThanks}
+
+\begin{ThesisAbstract}
+\lipsum[3]
+\end{ThesisAbstract}
+
+\begin{ThesisKeyWords}
+    Bug, Machine Learning, Assignee
+\end{ThesisKeyWords}
+
+\MainMatter
+
+\tableofcontents
+
+\input{chapters/Introduction}
+\input{chapters/Related_Work}
+\input{chapters/Results}
+\input{chapters/Conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{index}
+
+\appendix
+
+\chapter{Appendix One}
+
+\lipsum[1]
+
+\todos
+
+\end{document}
+
