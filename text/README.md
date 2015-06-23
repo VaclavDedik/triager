@@ -1,4 +1,4 @@
-Thesis Management System for Industrial Partner Red Hat
+Computer-Aided Ticket Triage
 ===========
 
 How to build the thesis text
@@ -7,6 +7,10 @@ How to build the thesis text
 All you need to do is run this command:
 
     $ make
+
+Or if you want it to be fast (without rebuilding index information):
+
+    $ make fast
 
 If you also want to run evince, use this command:
 
