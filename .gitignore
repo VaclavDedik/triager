@@ -65,7 +65,7 @@ nohup.out
 # Latex
 *.log
 *.out
-index.pdf
+thesis.pdf
 *.aux
 *.tfm
 *.600pk
