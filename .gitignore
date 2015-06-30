@@ -76,3 +76,4 @@ thesis.pdf
 *.blg
 *.fdb_latexmk
 *.synctex.gz
+*.tdo

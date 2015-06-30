@@ -15,4 +15,4 @@ start: thesis-text
 	evince thesis.pdf
 
 clean:
-	rm -rf *.{log,out,pdf,aux,tfm,600pk,514pk,fls,toc,bbl,blg,fdb_latexmk,synctex.gz}
+	rm -rf *.{log,out,pdf,aux,tfm,600pk,514pk,fls,toc,bbl,blg,fdb_latexmk,synctex.gz,tdo}

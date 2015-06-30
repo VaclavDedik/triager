@@ -1,6 +1,43 @@
-\chapter{Results}
+\chapter{Evaluation}
 
-In this chapter, we present the results for various models on three datasets.\todo{What datasets? Describe or make a reference.} We compare the performance of the models and the datasets. This includes comparison of open source data downloaded from the Internet with the proprietary data provided by the private company. In the third section, we compare the performance for different number of recommendations.\todo{What else? There should probably be more.}
+In this chapter, we present the results for various models on three datasets. First, we provide a description and origin of these datasets. Then we compare the performance of the models and the datasets. This includes comparison of open source data downloaded from the Internet with the proprietary data provided by the private company. In the third section, we compare the performance for different number of recommendations.\todo{What else? There should probably be more.}
+
+\section{Datasets}
+
+To evaluate performance of a model, a set of necessary data is necessary. We provide description of the three datasets that we chose for the evaluation of the models in this section.
+
+\subsection{Firefox Data}
+
+This dataset is downloaded from Mozilla repository\footnote{https://bugzilla.mozilla.org} in product Firefox. We downloaded all bugs that are in status \texttt{RESOLVED} with resolution \texttt{FIXED} and were created in year 2010 or later. We also removed bugs with field \texttt{assigned\_to} set to \texttt{nobody@mozilla.org} as those tickets were resolved and fixed but not assigned. This yields $9,141$ bugs in total. To get a better comparison with the other datasets, we only use $3,000$ datasets for training and cross-validation that were created between 2010-01-01 and 2012-07-10. This dataset contains $343$ labels (developers). Finally, we remove developers who did not fix at least $30$ bugs, yielding $1,810$ bugs with $20$ developers. The histogram with frequencies of the developers and cumulative distribution is on figure~\ref{fig:datasets.firefox.dist}.
+
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{./images/distribution/firefox.png}
+    \caption{Histogram and distribution of the Firefox data.}
+    \label{fig:datasets.firefox.dist}
+\end{figure}
+
+\subsection{Netbeans Data}
+
+Netbeans data were downloaded from Netbeans bug repository\footnote{https://netbeans.org/bugzilla/}. We considered latest $3,000$ bugs that are in status \texttt{RESOLVED} with resolution \texttt{FIXED}. We removed bugs with assignee \texttt{kenai\_tester\_git} as those were created automatically resulting in $2,924$ bug reports. These bugs were created between 2014-06-14 and 2015-06-14 and they contain $92$ developers. After removing developers who did not fix at least 30 bugs, the dataset contains $2,528$ reports with $30$ developers. Figure~\ref{fix:datasets.netbeans.dist} is a histogram and distribution of this datasets.
+
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{./images/distribution/netbeans.png}
+    \caption{Histogram and distribution of the Netbeans data.}
+    \label{fig:datasets.netbeans.dist}
+\end{figure}
+
+\subsection {Proprietary Data}
+
+The Proprietary dataset was provided by a company that wants to remain anonymous. The provided dataset contains $2,764$ bug reports created between 2009-03-07 and 2013-08-23. Only bug reports that were resolved with assigned developer were considered. There are $142$ developers in this dataset. Only $1,997$ bugs assigned to $29$ developers were retained after removal of developers with less than $30$ fixed bugs. The histogram and probability distribution is pictured on figure~\ref{fig:datasets.proprietary.dist}.
+
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{./images/distribution/proprietary.png}
+    \caption{Histogram and distribution of the Proprietary data.}
+    \label{fig:datasets.proprietary.dist}
+\end{figure}
 
 \section{Comparison of Models}
 

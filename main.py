@@ -10,7 +10,7 @@ from triager import parsers
 
 def main():
     # Parse data into documents
-    #parser = parsers.MRSParser("data/unify/MRs/", project_match="OPW.*")
+    #parser = parsers.MRSParser("data/prop/MRs/", project_match="OPW.*")
     parser = parsers.CSVBugzillaParser("data/opensource/netbeans")
     #parser = parsers.BugzillaParser("data/opensource/mozilla_firefox")
     print "Parsing data by parser: %s" % parser
