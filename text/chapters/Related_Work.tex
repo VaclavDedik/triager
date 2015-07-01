@@ -1,4 +1,5 @@
 \chapter{Related Work}
+\label{chapter:related-work}
 
 Over the years there have been many attempts to automate bug triage. First effort was made by Čubranić and Murphy~\cite{Murphy} who used a text categorization approach with a Naive Bayes classifier on Eclipse data. Their feature vector included a bag of words constructed from the data with stop words and punctuation removed paving the way for subsequent attempts of automatic bug assignment. Number of reports in their dataset is 15,670 with 162 classes while the downloaded reports were created in a span of half a year. They achieved about 30\% accuracy and also showed that stemming has no real effect on classification performance, which is a main reason why many future efforts do not use it. Another interesting conclusion is that removing words from feature vector occurring less than *x*-times seems to decrease the performance rather than increase it.
 

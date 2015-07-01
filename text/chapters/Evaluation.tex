@@ -28,7 +28,7 @@ Netbeans data were downloaded from Netbeans bug repository\footnote{https://netb
     \label{fig:datasets.netbeans.dist}
 \end{figure}
 
-\subsection {Proprietary Data}
+\subsection{Proprietary Data}
 
 The Proprietary dataset was provided by a company that wants to remain anonymous. The provided dataset contains $2,764$ bug reports created between 2009-03-07 and 2013-08-23. Only bug reports that were resolved with assigned developer were considered. There are $142$ developers in this dataset. Only $1,997$ bugs assigned to $29$ developers were retained after removal of developers with less than $30$ fixed bugs. The histogram and probability distribution is pictured on figure~\ref{fig:datasets.proprietary.dist}.
 
@@ -38,6 +38,21 @@ The Proprietary dataset was provided by a company that wants to remain anonymous
     \caption{Histogram and distribution of the Proprietary data.}
     \label{fig:datasets.proprietary.dist}
 \end{figure}
+
+\section{Stop-Words Removal}
+
+Stop-words removal is a technique that can increases performance of the model. In this section, we determine whether the increase is significant enough to use it for subsequent comparisons of models.
+
+Figure~\ref{fig:models.firefox.stopwords} shows the increase in performance after all stop-words were removed from the feature vector of the Firefox data. You can see that the performance of the classifier slightly increased on all models. Accuracy increased by 3\%, 0\% and 1\% on SVM, Naive Bayes and CART model respectively. Precision value of the SVM model decreased by 1\% but increased by 6\% with Naive Bayes and by 1\% with CART. Finally, Recall values of SVM and Naive Bayes increased by 4\% and 2\% respectively while it slightly decreased on the CART model by about 1\%.
+
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{./images/comparison_of_models/firefox_0.png}
+    \caption{Stop-Words removal on Firefox data.}
+    \label{fig:models.firefox.stopwords}
+\end{figure}
+
+The results of the other datasets were similar in nature. We therefore conclude that the performance boost of stop-words removal is significant enough to warrant better results, which matches the conclusion of Čubranić and Murphy~\cite{Murphy} (see chapter~\ref{chapter:related-work}). Thus, in our evaluation, we always use stop-words removal in combination with other feature extraction/selection methods.
 
 \section{Comparison of Models}
 
@@ -49,7 +64,7 @@ On Figure~\ref{fig:results.models.firefox}, you can see the performance of the c
 
 \begin{figure}[htbp]
     \centering
-        \includegraphics[width=\textwidth,trim=8cm 1cm 8cm 1cm,clip]{./images/comparison_of_models/firefox.png}
+        \includegraphics[width=\textwidth]{./images/comparison_of_models/firefox.png}
     \caption{Comparison of models on Firefox data.}
     \label{fig:results.models.firefox}
 \end{figure}
@@ -60,7 +75,7 @@ The performance of the models on Netbeans data is shown on Figure~\ref{fig:resul
 
 \begin{figure}[htbp]
     \centering
-        \includegraphics[width=\textwidth,trim=8cm 1cm 8cm 1cm,clip]{./images/comparison_of_models/netbeans.png}
+        \includegraphics[width=\textwidth]{./images/comparison_of_models/netbeans.png}
     \caption{Comparison of models on Netbeans data.}
     \label{fig:results.models.netbeans}
 \end{figure}
@@ -71,7 +86,7 @@ In this case, the performance of all models decreased a lot in comparison with t
 
 \begin{figure}[htbp]
     \centering
-        \includegraphics[width=\textwidth,trim=8cm 1cm 8cm 1cm,clip]{./images/comparison_of_models/proprietary.png}
+        \includegraphics[width=\textwidth]{./images/comparison_of_models/proprietary.png}
     \caption{Comparison of models on the Proprietary data.}
     \label{fig:results.models.proprietary}
 \end{figure}
@@ -88,62 +103,44 @@ The main purpose of this section is to compare proprietary dataset with open-sou
 
 The first model for comparison is Naive Bayes. The only used feature extraction method for this model is stop-words removal.
 
-First plot (Figure \ref{fig:results.datasets.nb_accuracy}) represents accuracy of the Naive Bayes model. You can already see that the open source data perform better than the proprietary data. Accuracy of the classifier is 35 \% vs 24 \% when $x$ (see above) is set to 30. In the following text, we will always compare the results of this setting of parameter $x$ as we believe that is the best production value for the given size of the dataset.
+First plot (Figure \ref{fig:results.datasets.nb_accuracy}) represents accuracy of the Naive Bayes model. You can already see that the open source data perform better than the proprietary data. Accuracy of the classifier is 35\% vs 24\% when $x$ (see above) is set to 30. In the following text, we will always compare the results of this setting of parameter $x$ as we believe that is the best production value for the given size of the dataset.
 
 \begin{figure}[htbp]
     \centering
-        \includegraphics[width=250px]{./images/prop_vs_os/nb_accuracy.png}
+        \includegraphics[width=\textwidth]{./images/prop_vs_os/nb_accuracy.png}
     \caption{Comparison of accuracy of Naive Bayes model.}
     \label{fig:results.datasets.nb_accuracy}
 \end{figure}
 
-Second plot (Figure \ref{fig:results.datasets.nb_precision}) is a representation of precision of the same model. Precision of the classifier is 46 \% and 22 \% for the open source and proprietary data, respectively.
+Second plot (Figure \ref{fig:results.datasets.nb_pr}) is a representation of precision and recall of the same model. Precision of the classifier is 46\% and 22\% for the open source and proprietary data, respectively. Recall value is 29\% for the open source data and 19\% for the proprietary data.
 
 \begin{figure}[htbp]
     \centering
-        \includegraphics[width=250px]{./images/prop_vs_os/nb_precision.png}
-    \caption{Comparison of precision of Naive Bayes model.}
-    \label{fig:results.datasets.nb_precision}
-\end{figure}
-
-Figure \ref{fig:results.datasets.nb_recall} shows recall of the Naive Bayes model. Recall value is 29 \% for the open source data and 19 \% for the proprietary data.
-
-\begin{figure}[htbp]
-    \centering
-        \includegraphics[width=250px]{./images/prop_vs_os/nb_recall.png}
-    \caption{Comparison of recall of Naive Bayes model.}
-    \label{fig:results.datasets.nb_recall}
+        \includegraphics[width=\textwidth]{./images/prop_vs_os/nb_precision_and_recall.png}
+    \caption{Comparison of precision and recall of Naive Bayes model.}
+    \label{fig:results.datasets.nb_pr}
 \end{figure}
 
 \subsection{Support Vector Machine Model}
 
 The second model used for comparison of the proprietary dataset with the open-source dataset is Support Vector Machine model with TF-IDF weighing and stop-words removal as this model shows the most promising results.
 
-Figure \ref{fig:results.datasets.svm_accuracy} visualizes accuracy of the model. Even with this model, the open source data perform much better with accuracy value of 54 \% vs 33 \% of the proprietary data.
+Figure \ref{fig:results.datasets.svm_accuracy} visualizes accuracy of the model. Even with this model, the open source data perform much better with accuracy value of 54\% vs 33\% of the proprietary data.
 
 \begin{figure}[htbp]
     \centering
-        \includegraphics[width=250px]{./images/prop_vs_os/svm_accuracy.png}
+        \includegraphics[width=\textwidth]{./images/prop_vs_os/svm_accuracy.png}
     \caption{Comparison of accuracy of SVM model.}
     \label{fig:results.datasets.svm_accuracy}
 \end{figure}
 
-Precision of the SVM model is pictured on figure \ref{fig:results.datasets.svm_precision}. It again clearly shows that the precision value of the open source data is higher (again about 54 \%) than the precision value of the proprietary data (32 \%).
+Precision and recall of the SVM model is pictured on figure \ref{fig:results.datasets.svm_pr}. It again clearly shows that the precision value of the open source data is higher (again about 54 \%) than the precision value of the proprietary data (32\%). The recall value is 49\% for the open-source data and 26\% for the proprietary data.
 
 \begin{figure}[htbp]
     \centering
-        \includegraphics[width=250px]{./images/prop_vs_os/svm_precision.png}
+        \includegraphics[width=\textwidth]{./images/prop_vs_os/svm_precision_and_recall.png}
     \caption{Comparison of precision of SVM model.}
-    \label{fig:results.datasets.svm_precision}
-\end{figure}
-
-Last plot (Figure \ref{fig:results.datasets.svm_recall}) shows the recall of the same model. On the open source data, the classifier achieved recall value of 49 \% and on the proprietary data 26 \%.
-
-\begin{figure}[htbp]
-    \centering
-        \includegraphics[width=250px]{./images/prop_vs_os/svm_recall.png}
-    \caption{Comparison of recall of SVM model.}
-    \label{fig:results.datasets.svm_recall}
+    \label{fig:results.datasets.svm_pr}
 \end{figure}
 
 \subsection{Conclusion}
