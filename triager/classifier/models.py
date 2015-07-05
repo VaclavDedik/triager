@@ -1,4 +1,5 @@
 import numpy as np
+import operator
 from sklearn import naive_bayes
 from sklearn import svm, tree
 
@@ -43,6 +44,30 @@ class AbstractModel(object):
         """
 
         raise NotImplementedError()
+
+
+class BaselineModel(AbstractModel):
+    """This baseline model always predict label that is the most frequent."""
+
+    def __init__(self, feature_selector):
+        super(BaselineModel, self).__init__(feature_selector)
+
+    def train(self, documents):
+        X, Y = self.feature_selector.build(documents)
+        labels_freq = {}
+        for document in documents:
+            if document.label in labels_freq:
+                labels_freq[document.label] += 1
+            else:
+                labels_freq[document.label] = 1
+
+        self.labels_freq = sorted(labels_freq.items(), reverse=True,
+                                  key=operator.itemgetter(1))
+
+    def predict(self, document, n=1):
+        top_n = self.labels_freq[:n]
+        labels = map(lambda x: x[0], top_n)
+        return labels
 
 
 class NaiveBayesModel(AbstractModel):

@@ -39,6 +39,12 @@ The Proprietary dataset was provided by a company that wants to remain anonymous
     \label{fig:datasets.proprietary.dist}
 \end{figure}
 
+\section{Baseline}
+
+In this section, we establish a baseline for our models. Our baseline is very simple, the number of bug report that is assigned to each developer is counted and the developer with highest number of reports is selected as a prediction for each subsequent call of the \texttt{predict} function.
+
+Figure~\ref{fig:models.firefox.stopwords} shows the performance of the baseline model on Firefox data. While the accuracy of this model is relatively high (18\%), the precision and recall values are much lower (1\% and 5\%), which can be explained by the way macro-averaged metrics work, see TODO\todo{Replace with reference to the chapter/section which describes the metrics}. 
+
 \section{Stop-Words Removal}
 
 Stop-words removal is a technique that can increases performance of the model. In this section, we determine whether the increase is significant enough to use it for subsequent comparisons of models.
