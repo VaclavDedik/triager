@@ -39,6 +39,26 @@ The Proprietary dataset was provided by a company that wants to remain anonymous
     \label{fig:datasets.proprietary.dist}
 \end{figure}
 
+\subsection{Chi-Squared Test}
+
+In this section, we test the null hypothesis that two samples are from the same distribution. For this, we use the two-sided alternative of two-sample Chi-Squared test. We split the samples from each datasets into five bins and compute the \textit{p-value} for three pairs of samples (Netbeans and Firefox, Firefox and Proprietary, Proprietary and Netbeans).
+
+The Chi-Squared test with Netbeans and Firefox samples yields p-value of $0.4283$, as p-value~$> 0.05$ we fail to reject the null hypothesis that the two samples are from the same distribution with 5\% level of significance.
+
+The test with Firefox and Proprietary samples returns p-value equal to $0.8169$ so we again fail to reject the null hypothesis with 5\% level of significance. The last test with samples from Proprietary and Netbeans data results in p-value of $0.6735$, which again means the null hypothesis cannot be rejected with 5\% significance level.
+
+\subsection{T-Test}
+
+In the previous section, we tested the hypothesis that the datasets used in this thesis are from the same distribution. We failed to reject the hypothesis with all samples, in this section, we test the null hypothesis that the samples have the same population mean. For that, we have to test the hypothesis that the variance of the samples are the same.
+
+We use the two-sided alternative of the standard independent two-sample t-test to test the null hypothesis that the samples have the same population mean, and the two-sided alternative of the Levene test to test the null hypothesis that the samples have equal population variance. If we reject the null hypothesis of the Levene test, we use the two-sided alternative of the Welch's t-test instead of the standard t-test.
+
+First, we test the samples from Firefox and Proprietary datasets. The Levene test yields p-value equal to $0.0373$, as p-value~$< 0.05$, we reject the null hypothesis with 5\% significance level. To test the population mean of the two samples, we therefore have to use the Welch's t-test. The Welch's t-test results in p-value of $0.0343$, which means we have to reject the null hypothesis of equal population mean of the two samples with 5\% significance.
+
+Second, we test the samples from Firefox and Netbeans repositories. As the Levene tests returns p-value equal to $0.5166$, which is greater than the $\alpha$ of $0.05$, we fail to reject the null hypothesis of equal population variances with 5\% level of significance. Next, we use the standard independent t-test to test the population means. The p-value of this t-test on these two samples is equal to $0.7138$, which means we fail to reject the null hypothesis of equal population means with 5\% significance.
+
+Last samples we test are from Netbeans and Proprietary datasets. The p-value of the Levene test for these two samples is $0.0216$ thus we reject the null hypothesis of equal variances. The p-value of the Welch's t-test is equal to $0.0039$, which again means we can reject the null hypothesis that the two samples have the same population mean with 5\% significance. 
+
 \section{Baseline}
 
 In this section, we establish a baseline for our models. Our baseline is very simple, the number of bug report that is assigned to each developer is counted and the developer with highest number of reports is selected as a prediction for each subsequent call of the \texttt{predict} function.
