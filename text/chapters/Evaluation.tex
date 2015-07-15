@@ -57,7 +57,59 @@ First, we test the samples from Firefox and Proprietary datasets. The Levene tes
 
 Second, we test the samples from Firefox and Netbeans repositories. As the Levene tests returns p-value equal to $0.5166$, which is greater than the $\alpha$ of $0.05$, we fail to reject the null hypothesis of equal population variances with 5\% level of significance. Next, we use the standard independent t-test to test the population means. The p-value of this t-test on these two samples is equal to $0.7138$, which means we fail to reject the null hypothesis of equal population means with 5\% significance.
 
-Last samples we test are from Netbeans and Proprietary datasets. The p-value of the Levene test for these two samples is $0.0216$ thus we reject the null hypothesis of equal variances. The p-value of the Welch's t-test is equal to $0.0039$, which again means we can reject the null hypothesis that the two samples have the same population mean with 5\% significance. 
+Last samples we test are from Netbeans and Proprietary datasets. The p-value of the Levene test for these two samples is $0.0216$ thus we reject the null hypothesis of equal variances. The p-value of the Welch's t-test is equal to $0.0039$, which again means we can reject the null hypothesis that the two samples have the same population mean with 5\% significance.
+
+\section{Window Size}
+
+The size of the time window is an important question that needs to be addressed when dealing with machine learning. A naive approach uses all samples from a dataset to train the classifier, but a more advanced approach considers what effect does the size of the window have on the data and how it can improve the performance. In this section, we try to address this concern by evaluating the performance of the classifier for different sizes of the window.
+
+To determine weather a different size of the window helps the performance is a difficult endeavour, we attempt it by employing three different approaches, each approach can be described by two properties like this:
+
+\begin{enumerate}
+ \item Fixed number of bugs in each period, variable size of the train set
+ \item Variable number of bugs in each period, fixed size of the train set
+ \item Variable number of bugs in each period, variable size of the train set
+\end{enumerate}
+
+The Firefox dataset is used for testing of all approaches. The model that is used is Support Vector Machine with Stop-Words removed and TF-IDF weighing.
+
+\subsection{First Approach}
+
+In the first approach, we first remove all bugs from the whole dataset that were fixed by developers with less than 20 fixed bugs. Then we split the remaining dataset into 8 bins. First bin contains 1000 randomly selected bug reports from period 1. All subsequent bins (2-8) contain 500 randomly selected reports from periods 2-8. There are 8 periods, first period is about one year long, all the other periods are about half a year long each. All periods combined add up to the time span of the whole dataset and each $n+1$ period contains bugs older than $n$ period. We train the classifier on period 1, then 1-2, 1-3, 1-4, 1-5, 1-6, 1-7 and 1-8. We test each trained classifier on the same cross-validation set of 300 bug reports that are newer than bugs in period 1.
+
+The disadvantage of this approach is that you select fixed number of bugs from each period. In real world, each period can contain different number of bug reports based e.g. on season. Another disadvantage is that you remove developers that do not meet the criteria of 20 bugs fixed based on the whole dataset. If some developers were very active in the past but are no longer very relevant, they will not be removed from a dataset that is constructed from periods in which the developer no longer fulfills the criteria.
+
+The result is visualized on figure~\ref{fig:window.firefox.1a}. You can see that about the best result is achieved with the size of the window equal to 30 months. Unfortunately, the performance of the classifier for other sizes is very similar and the results is therefore quite inconclusive.
+
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{./images/window_size/firefox_1a.png}
+    \caption{Performance of the classifier for different size of the window, 1st approach}
+    \label{fig:window.firefox.1a}
+\end{figure}
+
+\subsection{Second Approach}
+
+In the second approach, we employ the same periods, except period 1 that is about 15 months long. Another difference is that each train set contains 3000 randomly selected bug reports from period 1, 1-2, 1-3 etc. and the size of the sample is in this case therefore fixed, what is different is the period from which they were selected. From each bin, all bug reports that were fixed by a developer with less than 30 fixed bugs within the same train set are removed. We also remove all bug reports from cross-validation set that are not in the train set. We do this to get more relevant results from macro-averaged metrics, because otherwise the result of such metrics would be very close to zero.
+
+The disadvantage of the second approach is that it does not really tell us what size of the window can be used to get the best performance. What it shows is whether the size of the window from which an equal size of sample is selected matters.
+
+Figure~\ref{fig:window.firefox.2a} shows the plot of this approach. The performance decreases as the size of the window increases, which is expected. Precision and recall however increases when the size of the window is around 45 months.~\todo{Try to figure out why}
+
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{./images/window_size/firefox_2a.png}
+    \caption{Performance of the classifier for different size of the window, 2nd approach}
+    \label{fig:window.firefox.2a}
+\end{figure}
+
+\subsection{Third Approach}
+
+Finally, in the third approach, we again use the same periods as in the second approach. The difference is that we select all bug reports as train set.
+
+The advantage is that this approach is that it is closest to reality (no random selection). The disadvantage is, however, that the results are skewed by a variable number of samples in each period. The last major disadvantage is that the number of classes (developers) increases significantly each time samples from another period are added.
+
+TODO: Add the plot of this approach and write about it (takes a lot of time to train SVM on 9000 data samples...).
 
 \section{Baseline}
 
