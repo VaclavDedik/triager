@@ -77,3 +77,6 @@ thesis.pdf
 *.fdb_latexmk
 *.synctex.gz
 *.tdo
+
+# Ipython
+.ipynb_checkpoints
