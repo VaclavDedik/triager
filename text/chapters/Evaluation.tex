@@ -107,9 +107,14 @@ Figure~\ref{fig:window.firefox.2a} shows the plot of this approach. The performa
 
 Finally, in the third approach, we again use the same periods as in the second approach. The difference is that we select all bug reports as train set.
 
-The advantage is that this approach is that it is closest to reality (no random selection). The disadvantage is, however, that the results are skewed by a variable number of samples in each period. The last major disadvantage is that the number of classes (developers) increases significantly each time samples from another period are added.
+The advantage is that this approach is closest to reality (no random selection). The disadvantage is, however, that the results are skewed by a variable number of samples in each period. The last major disadvantage is that the number of classes (developers) increases significantly each time samples from the next period are added. Figure~\ref{fig:window.firefox.3a} shows the plot of this approach.
 
-TODO: Add the plot of this approach and write about it (takes a lot of time to train SVM on 9000 data samples...).
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{./images/window_size/firefox_2a.png}
+    \caption{Performance of the classifier for different size of the window, 2nd approach}
+    \label{fig:window.firefox.3a}
+\end{figure}
 
 \section{Baseline}
 
