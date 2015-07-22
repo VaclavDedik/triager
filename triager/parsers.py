@@ -42,6 +42,7 @@ class MRSParser(DocumentParser):
                         ticket_info[2] = None
                     document = Document(
                         ticket_info[0], ticket_info[1], ticket_info[2])
+                    document._created = ticket_info[4]
                     documents.append(document)
 
         return documents
@@ -51,7 +52,7 @@ class MRSParser(DocumentParser):
             content = f.readlines()
             content = [line.rstrip() for line in content]
 
-        ticket_info = [None, "", None, ""]
+        ticket_info = [None, "", None, "", None]
         ticket_id = os.path.basename(fname).replace(".html", "")
         description_stage = 0
         is_bug = False
@@ -78,6 +79,11 @@ class MRSParser(DocumentParser):
             assignee_match = re.match("\| Action-By:  ([\w,']+)", line)
             if assignee_match and not ticket_info[2]:
                 ticket_info[2] = assignee_match.group(1).strip()
+
+            # get date of creation
+            created_match = re.match("^\| Created:    (\d+\.\d+\.\d+)", line)
+            if created_match and not ticket_info[4]:
+                ticket_info[4] = created_match.group(1).strip()
 
             # get description
             description_match = re.match(
@@ -150,6 +156,7 @@ class BugzillaParser(DocumentParser):
             description = comments[str(bug["id"])]["comments"]["text"]
             label = bug[label_field]
             document = Document(title, description, label)
+            document._created = comments[str(bug["id"])]["comments"]["time"]
             documents.append(document)
 
         return documents
