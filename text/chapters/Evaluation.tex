@@ -111,9 +111,35 @@ The advantage is that this approach is closest to reality (no random selection).
 
 \begin{figure}[htbp]
     \centering
-        \includegraphics[width=\textwidth]{./images/window_size/firefox_2a.png}
-    \caption{Performance of the classifier for different size of the window, 2nd approach}
+        \includegraphics[width=\textwidth]{./images/window_size/firefox_3a.png}
+    \caption{Performance of the classifier for different size of the window, 3rd approach}
     \label{fig:window.firefox.3a}
+\end{figure}
+
+\section{Time-Window Analysis}
+
+In this section, we analyze the distribution of topics with respect to time for Proprietary and Firefox datasets. We model 30 topics using Latent Dirichlet Allocation in our approach.
+
+\subsection{Firefox Data}
+
+All our Firefox bug reports were created within 62 months. You can see the distribution on figure~\ref{fig:distribution.firefox.topic}.
+
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{./images/topic_component_distribution/firefox_topic.png}
+    \caption{Time-Window Analysis of Firefox Data by Topics}
+    \label{fig:distribution.firefox.topic}
+\end{figure}
+
+\subsection{Proprietary Data}
+
+The proprietary bug reports were created within 48 months. You can see the distribution on figure~\ref{fig:distribution.prop.topic}.
+
+\begin{figure}[htbp]
+    \centering
+        \includegraphics[width=\textwidth]{./images/topic_component_distribution/proprietary_topic.png}
+    \caption{Time-Window Analysis of Proprietary Data by Topics}
+    \label{fig:distribution.prop.topic}
 \end{figure}
 
 \section{Baseline}
