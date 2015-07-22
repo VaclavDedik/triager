@@ -3,6 +3,7 @@ import numpy as np
 from nltk.corpus import stopwords
 from sklearn.decomposition import TruncatedSVD
 from sklearn import feature_selection
+from sklearn.feature_extraction.text import CountVectorizer
 
 import utils
 
@@ -59,64 +60,29 @@ class BasicSelector(AbstractSelector):
     simply counting the number of words.
     """
 
-    def __init__(self, min_len=1, min_occur=1):
-        """Initialize basic selector with given parameters.
-
-        :param min_len: Minimal length of a word to be included as a feature.
-        :param min_occur: Minimum number of a word occurrences to be included
-                          as a feature.
-        """
-
-        self.min_len = min_len
-        self.min_occur = min_occur
-
     def build(self, documents):
         self._build_labels(documents)
-        self._build_features(documents)
         X, Y = [], []
 
+        docs_vector = []
         for document in documents:
-            x = self.get_x(document)
-            y = self.labels.index(document.label)
-            X.append(x)
-            Y.append(y)
+            docs_vector.append(document.title + "\n" + document.content)
+            Y.append(self.labels.index(document.label))
 
-        return np.array(X), np.transpose([Y])
+        self.count_vect = CountVectorizer(decode_error="replace")
+        X = np.array(self.count_vect.fit_transform(docs_vector).todense())
+
+        self.features = sorted(self.count_vect.vocabulary_.keys())
+
+        return X, np.transpose([Y])
 
     def get_x(self, document):
         """Counts words in provided document (both in title and content
         together) that occur in the field ``features``.
         """
 
-        x = []
-        word_counts = utils.count_words(
-            "%s\n%s" % (document.title, document.content))
-
-        for word in self.features:
-            if word in word_counts:
-                x.append(word_counts[word])
-            else:
-                x.append(0)
-
-        return np.array(x)
-
-    def _build_features(self, documents):
-        """Concatenates all document titles and content together and creates
-        a feature vector from all the words in it. Words that occur in the
-        list of documents less then ``min_occur`` times are removed and so are
-        words that are shorter than ``min_len``.
-        """
-
-        consolidated = ""
-        for document in documents:
-            consolidated += document.title + "\n"
-            consolidated += document.content + "\n"
-
-        words = sorted(
-            [w for w, c in utils.count_words(consolidated).iteritems()
-             if c >= self.min_occur])
-        words = [w for w in words if len(w) >= self.min_len]
-        self.features = words
+        words = document.title + "\n" + document.content
+        return np.array(self.count_vect.transform([words]).todense())
 
     def _build_labels(self, documents):
         """Builds labels by sorting all unique occurrences of labels in all
@@ -129,8 +95,7 @@ class BasicSelector(AbstractSelector):
         self.labels = sorted(labels)
 
     def __str__(self):
-        return "BasicSelector(min_len=%s, min_occur=%s)" \
-            % (self.min_len, self.min_occur)
+        return "BasicSelector()"
 
 
 class SelectorDecorator(AbstractSelector):
