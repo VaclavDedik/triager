@@ -13,5 +13,10 @@ setup(
     author_email="vaclav.dedik@gmail.com",
 
     packages=find_packages(),
-    install_requires=['numpy', 'nltk', 'scipy', 'scikit-learn'],
+    install_requires=[
+        'numpy',
+        'nltk',
+        'scipy',
+        'scikit-learn'
+    ],
 )
