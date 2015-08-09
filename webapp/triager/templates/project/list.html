@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>List of Projects</h1>
+
+  {% if projects.first() %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for project in projects %}
+        <tr>
+          <td>{{ project.id }}</td>
+          <td><a href="{{ url_for('view_project', id=project.id) }}">{{ project.name }}</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p>There are currently no projects.</p>
+  {% endif %}
+{% endblock %}

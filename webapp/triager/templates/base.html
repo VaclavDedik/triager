@@ -40,9 +40,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
             <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
             <li><a href="#">Help</a></li>
           </ul>
         </div>
@@ -53,18 +51,37 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-            <li><a href="#">Reports</a></li>
-            <li><a href="#">Analytics</a></li>
-            <li><a href="#">Export</a></li>
+            <li {% if request.endpoint == 'list_projects' %}class="active"{% endif %}>
+              <a href="{{ url_for('list_projects') }}">Show all projects</a>
+            </li>
+            <li {% if request.endpoint == 'create_project' %}class="active"{% endif %}>
+              <a href="{{ url_for('create_project') }}">Add another project</a>
+            </li>
           </ul>
+          {% if all_projects.first() %}
           <ul class="nav nav-sidebar">
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
+            {% for proj in all_projects|sort(attribute='name') %}
+            <li {% if request.endpoint == 'view_project' and proj.id == project.id %}class="active"{% endif %}>
+              <a href="{{ url_for('view_project', id=proj.id) }}">{{ proj.name }}</a>
+            </li>
+            {% endfor %}
           </ul>
+          {% endif %}
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              <ul class="flash-messages list-unstyled">
+              {% for category, message in messages %}
+                <li class="alert alert-{{ category|canonize_alert }}">
+                  <strong>{{ category|canonize_alert|title }}</strong>
+                  {{ message }}
+                </li>
+              {% endfor %}
+              </ul>
+            {% endif %}
+          {% endwith %}
+
           {% block content %}{% endblock %}
         </div>
       </div>

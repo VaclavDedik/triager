@@ -14,11 +14,12 @@ setup(
 
     packages=find_packages(),
     install_requires=[
-        # main dependencies
         'classifier',
         'Flask',
         'Jinja2',
-        # supporting dependencies
+        'sqlalchemy==1.0.8',
+        'flask-sqlalchemy==2.0',
+        'flask-wtf==0.12.0',
         'numpy',
         'pandas'
     ],
