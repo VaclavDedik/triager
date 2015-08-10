@@ -61,7 +61,8 @@
           {% if all_projects.first() %}
           <ul class="nav nav-sidebar">
             {% for proj in all_projects|sort(attribute='name') %}
-            <li {% if request.endpoint == 'view_project' and proj.id == project.id %}class="active"{% endif %}>
+            {% set project_endpoints = ['view_project', 'triage_project', 'edit_project'] %}
+            <li {% if request.endpoint in project_endpoints  and proj.id == project.id %}class="active"{% endif %}>
               <a href="{{ url_for('view_project', id=proj.id) }}">{{ proj.name }}</a>
             </li>
             {% endfor %}

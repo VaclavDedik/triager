@@ -2,4 +2,11 @@
 
 {% block content %}
   <h1>{{ project.name }}</h1>
+
+  <div class="actions">
+    <h2>Actions</h2>
+
+    <a class="btn btn-default btn-primary" href="{{ url_for('triage_project', id=project.id) }}">Triage</a>
+    <a class="btn btn-default btn-danger" href="{{ url_for('edit_project', id=project.id) }}">Edit</a>
+  </div>
 {% endblock %}

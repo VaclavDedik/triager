@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for
 
 from triager import app, db
 from models import Project
-from forms import ProjectForm
+from forms import ProjectForm, IssueForm
 
 
 @app.route("/")
@@ -12,7 +12,7 @@ def homepage():
 
 @app.route("/project/<id>")
 def view_project(id):
-    project = Project.query.get(id)
+    project = Project.query.get_or_404(id)
     return render_template("project/view.html", project=project)
 
 
@@ -36,6 +36,31 @@ def create_project():
 def list_projects():
     projects = Project.query
     return render_template("project/list.html", projects=projects)
+
+
+@app.route("/project/<id>/triage", methods=['GET', 'POST'])
+def triage_project(id):
+    project = Project.query.get_or_404(id)
+    form = IssueForm()
+
+    return render_template("project/triage.html",
+                           form=form, project=project)
+
+
+@app.route("/project/<id>/edit", methods=['GET', 'POST'])
+def edit_project(id):
+    project = Project.query.get_or_404(id)
+    form = ProjectForm(obj=project)
+
+    if form.validate_on_submit():
+        form.populate_obj(project)
+        db.session.add(project)
+        db.session.commit()
+        flash("Project %s sucessfully updated." % project.name)
+        return redirect(url_for('view_project', id=project.id))
+
+    return render_template("project/edit.html",
+                           form=form, project=project)
 
 
 # Context Processors

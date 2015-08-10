@@ -3,12 +3,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>Create new project</h1>
+  <h1>Edit {{ project.name }}</h1>
 
-  <form id="project-form-create" role="form" method="POST">
+  <form id="project-form-update" role="form" method="POST">
     {{ form.csrf_token }}
 
     {{ f.text_input(form.name, form.errors.name) }}
-    {{ f.submit('Create new project') }}
+    {{ f.submit('Update') }}
   </form>
 {% endblock %}
