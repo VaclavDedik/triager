@@ -7,7 +7,8 @@ from forms import ProjectForm, IssueForm
 
 @app.route("/")
 def homepage():
-    return render_template("index.html")
+    projects = Project.query
+    return render_template("index.html", projects=projects)
 
 
 @app.route("/project/<id>")
@@ -30,12 +31,6 @@ def create_project():
 
     return render_template("project/create.html",
                            form=form, project=new_project)
-
-
-@app.route("/projects")
-def list_projects():
-    projects = Project.query
-    return render_template("project/list.html", projects=projects)
 
 
 @app.route("/project/<id>/triage", methods=['GET', 'POST'])

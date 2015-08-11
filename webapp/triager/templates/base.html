@@ -51,11 +51,11 @@
       <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
           <ul class="nav nav-sidebar">
-            <li {% if request.endpoint == 'list_projects' %}class="active"{% endif %}>
-              <a href="{{ url_for('list_projects') }}">Show all projects</a>
+            <li {% if request.endpoint == 'homepage' %}class="active"{% endif %}>
+              <a href="{{ url_for('homepage') }}"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Show all projects</a>
             </li>
             <li {% if request.endpoint == 'create_project' %}class="active"{% endif %}>
-              <a href="{{ url_for('create_project') }}">Add another project</a>
+              <a href="{{ url_for('create_project') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add another project</a>
             </li>
           </ul>
           {% if all_projects.first() %}
