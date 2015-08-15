@@ -5,11 +5,24 @@
 {% block content %}
   <h1>Triage of {{ project.name }}</h1>
 
-  <form id="issue-form-triage" role="form" method="POST">
-    {{ form.csrf_token }}
-    
-    {{ f.text_input(form.summary, form.errors.summary) }}
-    {{ f.textarea(form.description, form.errors.description) }}
-    {{ f.submit('Triage') }}
-  </form>
+  <div class="row">
+    <div class="col-md-8">
+      <form id="issue-form-triage" role="form" method="POST">
+        {{ form.csrf_token }}
+        
+        {{ f.text_input(form.summary, form.errors.summary) }}
+        {{ f.textarea(form.description, form.errors.description) }}
+        {{ f.submit('Triage') }}
+      </form>
+    </div>
+
+    <div class="col-md-4">
+      <h3>Predicted Assignee:</h3>
+
+      <ol>
+        <li>Someone</li>
+        <li>Someone</li>
+      </ol>
+    </div>
+  </div>
 {% endblock %}
