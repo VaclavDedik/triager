@@ -29,7 +29,8 @@ def train_project(id):
 
         # save
         dump_dir = os.path.join(app.config['MODEL_FOLDER'], str(id))
-        os.mkdir(dump_dir)
+        if not os.path.exists(dump_dir):
+            os.mkdir(dump_dir)
         joblib.dump(model, os.path.join(dump_dir, 'svm.pkl'))
         project.train_status = TrainStatus.TRAINED
         db.session.add(project)

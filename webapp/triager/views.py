@@ -109,7 +109,7 @@ def train_project(id):
     db.session.add(project)
     db.session.commit()
 
-    q.enqueue(jobs.train_project, project.id, timeout=600)
+    q.enqueue(jobs.train_project, project.id, timeout=60*60*5)
 
     flash("Project %s is successfully scheduled to be trained." % project.name)
     return redirect(url_for('view_project', id=project.id))
