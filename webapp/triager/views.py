@@ -1,15 +1,20 @@
-import models
+import os
+import joblib
 
+import models
+import jobs
+
+from classifier.document import Document
 from flask import render_template, flash, redirect, url_for
 
-from triager import app, db
-from models import Project
+from triager import app, db, q
+from models import Project, TrainStatus
 from forms import ProjectForm, IssueForm, DataSourceForm
 
 
 @app.route("/")
 def homepage():
-    projects = Project.query
+    projects = db.session.query(Project.id, Project.name)
     return render_template("index.html", projects=projects)
 
 
@@ -48,15 +53,6 @@ def create_project():
                            form=form, ds_forms=ds_forms, project=new_project)
 
 
-@app.route("/project/<id>/triage", methods=['GET', 'POST'])
-def triage_project(id):
-    project = Project.query.get_or_404(id)
-    form = IssueForm()
-
-    return render_template("project/triage.html",
-                           form=form, project=project)
-
-
 @app.route("/project/<id>/edit", methods=['GET', 'POST'])
 def edit_project(id):
     project = Project.query.get_or_404(id)
@@ -83,15 +79,44 @@ def edit_project(id):
 
             db.session.add(project)
             db.session.commit()
-            flash("Project %s sucessfully updated." % project.name)
+            flash("Project %s successfully updated." % project.name)
             return redirect(url_for('view_project', id=project.id))
 
     return render_template("project/edit.html",
                            form=form, ds_forms=ds_forms, project=project)
 
 
+@app.route("/project/<id>/triage", methods=['GET', 'POST'])
+def triage_project(id):
+    project = Project.query.get_or_404(id)
+    form = IssueForm()
+    predictions = []
+
+    if form.validate_on_submit():
+        issue = Document(form.summary.data, form.description.data)
+        model = joblib.load(
+            os.path.join(app.config['MODEL_FOLDER'], '%s/svm.pkl' % id))
+        predictions = model.predict(issue, n=10)
+
+    return render_template("project/triage.html",
+                           form=form, project=project, predictions=predictions)
+
+
+@app.route("/project/<id>/train")
+def train_project(id):
+    project = Project.query.get_or_404(id)
+    project.train_status = TrainStatus.TRAINING
+    db.session.add(project)
+    db.session.commit()
+
+    q.enqueue(jobs.train_project, project.id, timeout=600)
+
+    flash("Project %s is successfully scheduled to be trained." % project.name)
+    return redirect(url_for('view_project', id=project.id))
+
+
 # Context Processors
 @app.context_processor
 def all_projects():
-    projects = Project.query
+    projects = db.session.query(Project.id, Project.name)
     return dict(all_projects=projects)

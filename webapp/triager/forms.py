@@ -38,7 +38,8 @@ class BugzillaDataSourceForm(DataSourceForm):
 
 class IssueForm(Form):
     summary = StringField(
-        'Summary'
+        'Summary',
+        validators=[DataRequired()]
     )
 
     description = StringField(

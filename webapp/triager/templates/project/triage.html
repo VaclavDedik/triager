@@ -19,10 +19,15 @@
     <div class="col-md-4">
       <h3>Predicted Assignee:</h3>
 
+      {% if predictions %}
       <ol>
-        <li>Someone</li>
-        <li>Someone</li>
+        {% for prediction in predictions %}
+          <li>{{ prediction }}</li>
+        {% endfor %}
       </ol>
+      {% else %}
+      <p>No predictions.</p>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

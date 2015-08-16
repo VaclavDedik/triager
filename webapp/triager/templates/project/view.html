@@ -2,11 +2,13 @@
 
 {% block content %}
   <h1>{{ project.name }}</h1>
+  <h3>{{ project.train_status | readable_train_status }}</h3>
 
   <div class="actions">
     <h2>Actions</h2>
 
     <a class="btn btn-default btn-primary" href="{{ url_for('triage_project', id=project.id) }}">Triage</a>
+    <a class="btn btn-default btn-success" href="{{ url_for('train_project', id=project.id) }}">Train</a>
     <a class="btn btn-default btn-danger" href="{{ url_for('edit_project', id=project.id) }}">Edit</a>
   </div>
 {% endblock %}
