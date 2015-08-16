@@ -100,17 +100,19 @@ class NaiveBayesModel(AbstractModel):
 class SVMModel(AbstractModel):
     """Support Vector Machine model."""
 
-    def __init__(self, feature_selector, kernel=GaussianKernel(), C=1):
+    def __init__(self, feature_selector, kernel=GaussianKernel(), C=1,
+                 cache_size=200):
         super(SVMModel, self).__init__(feature_selector)
         self.C = C
         self.kernel = kernel
+        self.cache_size = cache_size
 
     def train(self, documents):
         X, Y = self.feature_selector.build(documents)
-        self._X, self._Y = X, Y
         if hasattr(self.kernel, 'sklearn_name'):
             self.svm = svm.SVC(C=self.C, kernel=self.kernel.sklearn_name,
-                               probability=True, **self.kernel.sklearn_params)
+                               probability=True, cache_size=self.cache_size,
+                               **self.kernel.sklearn_params)
         else:
             self.svm = svm.SVC(C=self.C, kernel=self.kernel.compute)
         self.svm.fit(X, np.concatenate(Y))
