@@ -119,7 +119,7 @@ def triage_project(id):
                            form=form, project=project, predictions=predictions)
 
 
-@app.route("/project/<id>/train")
+@app.route("/project/<id>/train", methods=["POST"])
 def train_project(id):
     project = Project.query.get_or_404(id)
     project.train_status = TrainStatus.TRAINING

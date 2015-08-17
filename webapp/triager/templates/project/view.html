@@ -11,12 +11,13 @@
     <h2>Actions</h2>
 
     <a class="btn btn-default btn-primary" href="{{ url_for('triage_project', id=project.id) }}">Triage</a>
-    <a class="btn btn-default btn-success" href="{{ url_for('train_project', id=project.id) }}">Train</a>
+
+    <a class="btn btn-default btn-success" href="#" data-toggle="modal" data-target="#train-project-confirm-modal">Train</a>
+    {{ c.confirm_dialog("train-project-confirm-modal", url_for('train_project', id=project.id) , "Confirm training of a project", '<p>Project %s will be trained, this can take a long time (one or more hours). Are you sure?</p>' % project.name) }}
+
     <a class="btn btn-default btn-danger" href="{{ url_for('edit_project', id=project.id) }}">Edit</a>
+
     <a class="btn btn-default btn-danger" href="#" data-toggle="modal" data-target="#delete-project-confirm-modal">Delete</a>
     {{ c.confirm_dialog("delete-project-confirm-modal", url_for('delete_project', id=project.id) , "Confirm deletion", '<p>Project %s will be permanently deleted and cannot be recovered. Are you sure?</p>' % project.name) }}
   </div>
 {% endblock %}
-
-{% block js %}
-{% endblock%}
