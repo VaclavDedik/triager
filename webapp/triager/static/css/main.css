@@ -103,3 +103,10 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+/*
+ * Custom helpers
+ */
+.inline {
+  display: inline;
+}

@@ -1,4 +1,5 @@
 import os
+import shutil
 import joblib
 
 import models
@@ -84,6 +85,22 @@ def edit_project(id):
 
     return render_template("project/edit.html",
                            form=form, ds_forms=ds_forms, project=project)
+
+
+@app.route("/project/<id>/delete", methods=['POST'])
+def delete_project(id):
+    project = Project.query.get_or_404(id)
+
+    # Delete project form database
+    db.session.delete(project)
+    db.session.commit()
+
+    # Remove model data
+    model_dir = os.path.join(app.config['MODEL_FOLDER'], str(id))
+    shutil.rmtree(model_dir, ignore_errors=True)
+
+    flash("Project %s successfully deleted." % project.name)
+    return redirect(url_for('homepage'))
 
 
 @app.route("/project/<id>/triage", methods=['GET', 'POST'])
