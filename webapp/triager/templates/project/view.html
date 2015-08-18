@@ -3,6 +3,8 @@
 
 {% extends 'base.html' %}
 
+{% block title %}Triager :: View {{ project.name }}{% endblock %}
+
 {% block content %}
   <h1>{{ project.name }}</h1>
   <h3>{{ project.train_status | readable_train_status }}</h3>

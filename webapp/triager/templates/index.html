@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}Triager :: Homepage :: List of projects{% endblock %}
+
 {% block content %}
-  <h1>List of Projects</h1>
+  <h1>List of projects</h1>
 
   {% if projects.first() %}
     <table class="table table-striped">
