@@ -113,7 +113,12 @@ def triage_project(id):
         issue = Document(form.summary.data, form.description.data)
         model = joblib.load(
             os.path.join(app.config['MODEL_FOLDER'], '%s/svm.pkl' % id))
-        predictions = model.predict(issue, n=10)
+        try:
+            predictions = model.predict(issue, n=10)
+        except ValueError:
+            flash("There is too little information provided. "
+                  "You need to add more text to the description or summary.",
+                  "error")
 
     return render_template("project/triage.html",
                            form=form, project=project, predictions=predictions)

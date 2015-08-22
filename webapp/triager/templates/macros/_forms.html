@@ -31,7 +31,9 @@
 {% endmacro %}
 
 {% macro submit(content, class="btn btn-default btn-primary") %}
-<button type="submit" class="{{ class }}">{{ content }}</button>
+<div class="form-group">
+  <button type="submit" class="{{ class }}">{{ content }}</button>
+</div>
 {% endmacro %}
 
 {% macro textarea(field, errors) %}

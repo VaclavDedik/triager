@@ -13,11 +13,55 @@
         </div>
         <div class="modal-footer">
           <form method="POST" action="{{ action }}">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
             {{ f.submit("Confirm") }}
           </form>
         </div>
       </div>
     </div>
   </div>
+{% endmacro %}
+
+{% macro measure(id, color, degree) %}
+{% if degree > 180 %}
+  {% set deg = 180 %}
+  {% set deg2 = degree - 180 %}
+{% else %}
+  {% set deg = degree %}
+  {% set deg2 = 0 %}
+{% endif %}
+
+<style>
+  #{{ id }} .pie {
+    background-color: {{ color }};
+    -webkit-transform:rotate({{ deg }}deg);
+    -moz-transform:rotate({{ deg }}deg);
+    -o-transform:rotate({{ deg }}deg);
+    transform:rotate({{ deg }}deg);
+  }
+
+  #{{ id }}2 {
+    -webkit-transform:rotate(180deg);
+    -moz-transform:rotate(180deg);
+    -o-transform:rotate(180deg);
+    transform:rotate(180deg);
+  }
+
+  #{{ id }}2 .pie {
+    background-color: {{ color }};
+    -webkit-transform:rotate({{ deg2 }}deg);
+    -moz-transform:rotate({{ deg2 }}deg);
+    -o-transform:rotate({{ deg2 }}deg);
+    transform:rotate({{ deg2 }}deg);
+  }
+
+</style>
+
+<div class="pie-container center-block">
+  <div class="pie-background"></div>
+  <div id="{{ id }}" class="hold"><div class="pie"></div></div>
+  {% if degree > 180 %}
+    <div id="{{ id }}2" class="hold"><div class="pie"></div></div>
+  {% endif %}
+</div>
 {% endmacro %}

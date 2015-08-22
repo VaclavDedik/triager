@@ -19,17 +19,32 @@
     </div>
 
     <div class="col-md-4">
-      <h3>Predicted Assignee:</h3>
+      <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">Predicted Assignees</div>
 
-      {% if predictions %}
-      <ol>
-        {% for prediction in predictions %}
-          <li>{{ prediction }}</li>
-        {% endfor %}
-      </ol>
-      {% else %}
-      <p>No predictions.</p>
-      {% endif %}
+        <!-- Table -->
+        <table class="table">
+          {% if predictions %}
+            {% for prediction in predictions %}
+              <tr>
+                <td width="32px" class="text-center"><strong>{{ loop.index }}</strong></td>
+                <td>
+                {% if loop.index == 1 %}
+                  <span id="prediction-{{ loop.index }}"
+                        ondblclick="select(this);"><strong>{{ prediction }}</strong></span>
+                {% else %}
+                  <span id="prediction-{{ loop.index }}"
+                        ondblclick="select(this);">{{ prediction }}</span>
+                {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr><td>No predictions.</td></tr>
+          {% endif %}
+        </table>
+      </div>
     </div>
   </div>
 {% endblock %}

@@ -105,6 +105,44 @@ body {
 }
 
 /*
+ * Charts
+ */
+.pie-container {
+  height: 150px;
+  width: 150px;
+}
+.pie-background {
+  background-color: grey;
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  -moz-border-radius: 75px;
+  -webkit-border-radius: 75px;
+  -o-border-radius: 75px;
+  border-radius: 75px;
+}
+.pie {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  -moz-border-radius: 75px;
+  -webkit-border-radius: 75px;
+  -o-border-radius: 75px;
+  border-radius: 75px;
+  clip: rect(0px, 75px, 150px, 0px);
+}
+.hold {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  -moz-border-radius: 75px;
+  -webkit-border-radius: 75px;
+  -o-border-radius: 75px;
+  border-radius: 75px;
+  clip: rect(0px, 150px, 150px, 75px);
+}
+
+/*
  * Custom helpers
  */
 .inline {

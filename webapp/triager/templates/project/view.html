@@ -7,6 +7,29 @@
 
 {% block content %}
   <h1>{{ project.name }}</h1>
+  <div class="row text-center">
+    <div class="col-xs-6 col-sm-3">
+      {{ c.measure("accuracy-%s" % project.id, "#00FF00", 270) }}
+      <h4>Accuracy</h4>
+      <span class="text-muted">80%</span>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      {{ c.measure("precision-%s" % project.id, "#0000FF", 200) }}
+      <h4>Precision</h4>
+      <span class="text-muted">60%</span>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      {{ c.measure("recall-%s" % project.id, "#FF0000", 180) }}
+      <h4>Recall</h4>
+      <span class="text-muted">50%</span>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      {{ c.measure("fscore-%s" % project.id, "#FF00FF", 190) }}
+      <h4>F-Score</h4>
+      <span class="text-muted">55%</span>
+    </div>
+  </div>
+
   <h3>{{ project.train_status | readable_train_status }}</h3>
 
   <div class="actions">
