@@ -16,7 +16,7 @@ def canonize_alert(value):
 @app.template_filter('readable_train_status')
 def readable_train_status(value):
     if value == TrainStatus.FAILED:
-        return "Failed"
+        return "Training failed"
     elif value == TrainStatus.NOT_TRAINED:
         return "Not trained"
     elif value == TrainStatus.TRAINED:
@@ -25,3 +25,17 @@ def readable_train_status(value):
         return "Training"
     else:
         return "/invalid value/"
+
+
+@app.template_filter('train_status_color')
+def train_status_color(value):
+    if value == TrainStatus.FAILED:
+        return "danger"
+    elif value == TrainStatus.NOT_TRAINED:
+        return "primary"
+    elif value == TrainStatus.TRAINED:
+        return "success"
+    elif value == TrainStatus.TRAINING:
+        return "warning"
+    else:
+        return "default"

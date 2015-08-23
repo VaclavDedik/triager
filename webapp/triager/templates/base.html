@@ -78,7 +78,7 @@
               <ul class="flash-messages list-unstyled">
               {% for category, message in messages %}
                 <li class="alert alert-{{ category|canonize_alert }}">
-                  {{ message }}
+                  {{ message | safe }}
                 </li>
               {% endfor %}
               </ul>

@@ -20,6 +20,7 @@
         </div>
       {% endif %}
     {% endfor %}
+    {{ f.text_input(form.schedule, form.errors.schedule) }}
 
     {{ f.submit('Create new project') }}
   </form>

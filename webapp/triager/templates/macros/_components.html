@@ -14,7 +14,7 @@
         <div class="modal-footer">
           <form method="POST" action="{{ action }}">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            {{ f.submit("Confirm") }}
+            <button type="submit" class="btn btn-default btn-primary">Confirm</button>
           </form>
         </div>
       </div>
@@ -34,10 +34,10 @@
 <style>
   #{{ id }} .pie {
     background-color: {{ color }};
-    -webkit-transform:rotate({{ deg }}deg);
-    -moz-transform:rotate({{ deg }}deg);
-    -o-transform:rotate({{ deg }}deg);
-    transform:rotate({{ deg }}deg);
+    -webkit-transform:rotate({{ "%d" % deg }}deg);
+    -moz-transform:rotate({{ "%d" % deg }}deg);
+    -o-transform:rotate({{ "%d" % deg }}deg);
+    transform:rotate({{ "%d" % deg }}deg);
   }
 
   #{{ id }}2 {
@@ -49,10 +49,10 @@
 
   #{{ id }}2 .pie {
     background-color: {{ color }};
-    -webkit-transform:rotate({{ deg2 }}deg);
-    -moz-transform:rotate({{ deg2 }}deg);
-    -o-transform:rotate({{ deg2 }}deg);
-    transform:rotate({{ deg2 }}deg);
+    -webkit-transform:rotate({{ "%d" % deg2 }}deg);
+    -moz-transform:rotate({{ "%d" % deg2 }}deg);
+    -o-transform:rotate({{ "%d" % deg2 }}deg);
+    transform:rotate({{ "%d" % deg2 }}deg);
   }
 
 </style>

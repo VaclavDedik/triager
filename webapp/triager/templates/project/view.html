@@ -6,43 +6,56 @@
 {% block title %}Triager :: View {{ project.name }}{% endblock %}
 
 {% block content %}
-  <h1>{{ project.name }}</h1>
-  <div class="row text-center">
-    <div class="col-xs-6 col-sm-3">
-      {{ c.measure("accuracy-%s" % project.id, "#00FF00", 270) }}
-      <h4>Accuracy</h4>
-      <span class="text-muted">80%</span>
-    </div>
-    <div class="col-xs-6 col-sm-3">
-      {{ c.measure("precision-%s" % project.id, "#0000FF", 200) }}
-      <h4>Precision</h4>
-      <span class="text-muted">60%</span>
-    </div>
-    <div class="col-xs-6 col-sm-3">
-      {{ c.measure("recall-%s" % project.id, "#FF0000", 180) }}
-      <h4>Recall</h4>
-      <span class="text-muted">50%</span>
-    </div>
-    <div class="col-xs-6 col-sm-3">
-      {{ c.measure("fscore-%s" % project.id, "#FF00FF", 190) }}
-      <h4>F-Score</h4>
-      <span class="text-muted">55%</span>
-    </div>
+  <div class="h1">
+    <h1 class="inline">{{ project.name }}</h1>
+    <h3 class="inline status">
+      <span class="label label-{{ project.train_status | train_status_color}}">{{ project.train_status | readable_train_status }}
+        {% if project.train_status == "failed" and project.training_message %}
+        <span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="{{ project.training_message }}"></span>
+        {% endif %}
+      </span>
+    </h3>
   </div>
 
-  <h3>{{ project.train_status | readable_train_status }}</h3>
+  <div class="row text-center">
+    <div class="col-xs-6 col-sm-3">
+      {{ c.measure("accuracy-%s" % project.id, "#00FF00", project.accuracy * 360) }}
+      <h4>Accuracy</h4>
+      <span class="text-muted">{{ "%4.2f %%" % project.accuracy }}</span>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      {{ c.measure("precision-%s" % project.id, "#0000FF", project.precision * 360) }}
+      <h4>Precision</h4>
+      <span class="text-muted">{{ "%4.2f %%" % project.precision }}</span>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      {{ c.measure("recall-%s" % project.id, "#FF0000", project.recall * 360) }}
+      <h4>Recall</h4>
+      <span class="text-muted">{{ "%4.2f %%" % project.recall }}</span>
+    </div>
+    <div class="col-xs-6 col-sm-3">
+      {{ c.measure("fscore-%s" % project.id, "#FF00FF", fscore * 360) }}
+      <h4>F-Score</h4>
+      <span class="text-muted">{{ "%4.2f %%" % fscore }}</span>
+    </div>
+  </div>
 
   <div class="actions">
     <h2>Actions</h2>
 
     <a class="btn btn-default btn-primary" href="{{ url_for('triage_project', id=project.id) }}">Triage</a>
 
-    <a class="btn btn-default btn-success" href="#" data-toggle="modal" data-target="#train-project-confirm-modal">Train</a>
-    {{ c.confirm_dialog("train-project-confirm-modal", url_for('train_project', id=project.id) , "Confirm training of a project", '<p>Project %s will be trained, this can take a long time (one or more hours). Are you sure?</p>' % project.name) }}
-
     <a class="btn btn-default btn-danger" href="{{ url_for('edit_project', id=project.id) }}">Edit</a>
 
     <a class="btn btn-default btn-danger" href="#" data-toggle="modal" data-target="#delete-project-confirm-modal">Delete</a>
     {{ c.confirm_dialog("delete-project-confirm-modal", url_for('delete_project', id=project.id) , "Confirm deletion", '<p>Project %s will be permanently deleted and cannot be recovered. Are you sure?</p>' % project.name) }}
   </div>
+{% endblock %}
+
+{% block js %}
+  <script type="text/javascript">
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
+  </script>
 {% endblock %}

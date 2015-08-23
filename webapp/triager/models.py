@@ -21,6 +21,13 @@ class Project(db.Model):
 
     train_status = db.Column(
         db.String(10), default=TrainStatus.NOT_TRAINED, nullable=False)
+    training_message = db.Column(db.String(253))
+    schedule = db.Column(db.String(63), default="0 0 * * *")
+    last_training = db.Column(db.Float(), default=0.0)
+
+    accuracy = db.Column(db.Float(), default=0.0)
+    precision = db.Column(db.Float(), default=0.0)
+    recall = db.Column(db.Float(), default=0.0)
 
 
 class DataSource(db.Model):

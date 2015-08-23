@@ -148,3 +148,13 @@ body {
 .inline {
   display: inline;
 }
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.status {
+   top: -5px;
+   position: relative;
+   margin-left: 5px;
+}

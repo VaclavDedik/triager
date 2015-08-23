@@ -5,6 +5,7 @@ import joblib
 import models
 import jobs
 
+from classifier import tests
 from classifier.document import Document
 from flask import render_template, flash, redirect, url_for
 
@@ -22,7 +23,9 @@ def homepage():
 @app.route("/project/<id>")
 def view_project(id):
     project = Project.query.get_or_404(id)
-    return render_template("project/view.html", project=project)
+
+    fscore = tests.fscore(project.precision, project.recall)
+    return render_template("project/view.html", project=project, fscore=fscore)
 
 
 @app.route("/project/create", methods=['GET', 'POST'])
@@ -124,20 +127,9 @@ def triage_project(id):
                            form=form, project=project, predictions=predictions)
 
 
-@app.route("/project/<id>/train", methods=["POST"])
-def train_project(id):
-    project = Project.query.get_or_404(id)
-    project.train_status = TrainStatus.TRAINING
-    db.session.add(project)
-    db.session.commit()
-
-    q.enqueue(jobs.train_project, project.id, timeout=60*60*5)
-
-    flash("Project %s is successfully scheduled to be trained." % project.name)
-    return redirect(url_for('view_project', id=project.id))
-
-
+#
 # Context Processors
+#
 @app.context_processor
 def all_projects():
     projects = db.session.query(Project.id, Project.name)
