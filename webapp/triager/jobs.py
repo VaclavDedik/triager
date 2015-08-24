@@ -5,9 +5,8 @@ import random
 import numpy as np
 
 from classifier import models, selectors, kernels, utils, tests
-from croniter import croniter
 
-from triager import db, app, q
+from triager import db, app
 from models import Project, TrainStatus
 
 
@@ -73,27 +72,3 @@ def train_project(id):
         db.session.add(project)
         db.session.commit()
         raise ex
-
-
-def retrain_scheduled_loop():
-    while True:
-        projects = Project.query
-
-        print("Found %s projects" % projects.count())
-        for project in projects:
-            print("Checking if project %s needs training" % project.id)
-            if project.train_status != TrainStatus.TRAINING:
-                print ("Project %s is not training" % project.id)
-                crontab = croniter(project.schedule, project.last_training)
-                nextrun = crontab.get_next()
-
-                if nextrun <= time.time():
-                    print("Queuing scheduled project %s for training"
-                          % project.id)
-                    project.train_status = TrainStatus.TRAINING
-                    db.session.add(project)
-                    db.session.commit()
-
-                    q.enqueue(train_project, project.id, timeout=60*60*5)
-
-        time.sleep(60)

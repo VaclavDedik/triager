@@ -3,14 +3,13 @@ import shutil
 import joblib
 
 import models
-import jobs
 
 from classifier import tests
 from classifier.document import Document
 from flask import render_template, flash, redirect, url_for
 
-from triager import app, db, q
-from models import Project, TrainStatus
+from triager import app, db
+from models import Project
 from forms import ProjectForm, IssueForm, DataSourceForm
 
 
