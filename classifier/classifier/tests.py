@@ -52,3 +52,13 @@ def precision_and_recall(model, documents_cv):
     recall = sum(recalli)/n_c
 
     return (precision, recall)
+
+
+def fscore(precision, recall):
+    """Computes F1-score based on precision and recall."""
+
+    fscore = 0.0
+    if precision + recall > 0:
+        fscore = 2*(precision*recall)/(precision+recall)
+
+    return fscore
