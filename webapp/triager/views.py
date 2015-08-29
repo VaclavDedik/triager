@@ -15,7 +15,7 @@ from forms import ProjectForm, IssueForm, DataSourceForm
 
 @app.route("/")
 def homepage():
-    projects = db.session.query(Project.id, Project.name)
+    projects = Project.query
     return render_template("index.html", projects=projects)
 
 
@@ -25,11 +25,12 @@ def view_project(id):
 
     form = IssueForm()
     predictions = []
+    model_path = os.path.join(app.config['MODEL_FOLDER'], '%s/svm.pkl' % id)
+    trained = os.path.isfile(model_path)
 
-    if form.validate_on_submit():
+    if trained and form.validate_on_submit():
         issue = Document(form.summary.data, form.description.data)
-        model = joblib.load(
-            os.path.join(app.config['MODEL_FOLDER'], '%s/svm.pkl' % id))
+        model = joblib.load(model_path)
         try:
             predictions = model.predict(issue, n=10)
         except ValueError:
@@ -39,7 +40,7 @@ def view_project(id):
 
     fscore = tests.fscore(project.precision, project.recall)
     return render_template("project/view.html", project=project, fscore=fscore,
-                           form=form, predictions=predictions)
+                           form=form, predictions=predictions, trained=trained)
 
 
 @app.route("/project/create", methods=['GET', 'POST'])

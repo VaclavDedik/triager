@@ -61,6 +61,7 @@
           <div class="panel-heading">Triage</div>
 
           <div class="panel-body">
+            {% if trained %}
             <form id="issue-form-triage" role="form" method="POST">
               {{ form.csrf_token }}
               
@@ -68,6 +69,9 @@
               {{ f.textarea(form.description, form.errors.description) }}
               {{ f.submit('Triage', form_group=False) }}
             </form>
+            {% else %}
+              <p>You cannot triage because this project is not trained yet.</p>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -78,7 +82,7 @@
           <div class="panel-heading">Predicted Assignees</div>
 
           <!-- Table -->
-          <table class="table">
+          <table class="table panel-table">
             {% if predictions %}
               {% for prediction in predictions %}
                 <tr>
@@ -95,7 +99,7 @@
                 </tr>
               {% endfor %}
             {% else %}
-              <tr><td>No predictions.</td></tr>
+              <tr><td><p>No predictions. Start triaging by filling the form on the left and clicking on triage.</p></td></tr>
             {% endif %}
           </table>
         </div>

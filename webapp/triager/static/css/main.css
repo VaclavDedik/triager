@@ -177,3 +177,7 @@ body {
   padding-left: 15px;
   padding-right: 15px;
 }
+
+.panel-table p {
+  padding: 7px;
+}
