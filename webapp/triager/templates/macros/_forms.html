@@ -30,16 +30,20 @@
 </div>
 {% endmacro %}
 
-{% macro submit(content, class="btn btn-default btn-primary") %}
-<div class="form-group">
-  <button type="submit" class="{{ class }}">{{ content }}</button>
-</div>
+{% macro submit(content, class="btn btn-default btn-primary", form_group=True) %}
+  {% if form_group %}
+  <div class="form-group">
+  {% endif %}
+    <button type="submit" class="{{ class }}">{{ content }}</button>
+  {% if form_group %}
+  </div>
+  {% endif %}
 {% endmacro %}
 
 {% macro textarea(field, errors) %}
 <div class="form-group {% if errors %} has-error {% endif %}">
   {{ field.label(class='control-label') }}
-  {{ field(class='form-control', placeholder=field.label.text, cols="35", rows="20") }}
+  {{ field(class='form-control', placeholder=field.label.text, rows="10") }}
   {% for error in errors %}
     <span class="help-block">{{ error }}</span>
   {% endfor %}

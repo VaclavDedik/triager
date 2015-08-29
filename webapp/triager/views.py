@@ -19,12 +19,27 @@ def homepage():
     return render_template("index.html", projects=projects)
 
 
-@app.route("/project/<id>")
+@app.route("/project/<id>", methods=['GET', 'POST'])
 def view_project(id):
     project = Project.query.get_or_404(id)
 
+    form = IssueForm()
+    predictions = []
+
+    if form.validate_on_submit():
+        issue = Document(form.summary.data, form.description.data)
+        model = joblib.load(
+            os.path.join(app.config['MODEL_FOLDER'], '%s/svm.pkl' % id))
+        try:
+            predictions = model.predict(issue, n=10)
+        except ValueError:
+            flash("There is too little information provided. "
+                  "You need to add more text to the description or summary.",
+                  "error")
+
     fscore = tests.fscore(project.precision, project.recall)
-    return render_template("project/view.html", project=project, fscore=fscore)
+    return render_template("project/view.html", project=project, fscore=fscore,
+                           form=form, predictions=predictions)
 
 
 @app.route("/project/create", methods=['GET', 'POST'])
@@ -103,27 +118,6 @@ def delete_project(id):
 
     flash("Project %s successfully deleted." % project.name)
     return redirect(url_for('homepage'))
-
-
-@app.route("/project/<id>/triage", methods=['GET', 'POST'])
-def triage_project(id):
-    project = Project.query.get_or_404(id)
-    form = IssueForm()
-    predictions = []
-
-    if form.validate_on_submit():
-        issue = Document(form.summary.data, form.description.data)
-        model = joblib.load(
-            os.path.join(app.config['MODEL_FOLDER'], '%s/svm.pkl' % id))
-        try:
-            predictions = model.predict(issue, n=10)
-        except ValueError:
-            flash("There is too little information provided. "
-                  "You need to add more text to the description or summary.",
-                  "error")
-
-    return render_template("project/triage.html",
-                           form=form, project=project, predictions=predictions)
 
 
 #

@@ -6,7 +6,7 @@
 {% block title %}Triager :: View {{ project.name }}{% endblock %}
 
 {% block content %}
-  <div class="h1">
+  <div class="h1 project-title">
     <h1 class="inline">{{ project.name }}</h1>
     <h3 class="inline status">
       <span class="label label-{{ project.train_status | train_status_color}}">{{ project.train_status | readable_train_status }}
@@ -15,40 +15,92 @@
         {% endif %}
       </span>
     </h3>
-  </div>
+    <div class="inline project-actions">
+        <a class="btn btn-default btn-warning" href="{{ url_for('edit_project', id=project.id) }}">Edit</a>
 
-  <div class="row text-center">
-    <div class="col-xs-6 col-sm-3">
-      {{ c.measure("accuracy-%s" % project.id, "#00FF00", project.accuracy * 360) }}
-      <h4>Accuracy</h4>
-      <span class="text-muted">{{ "%4.2f %%" % project.accuracy }}</span>
-    </div>
-    <div class="col-xs-6 col-sm-3">
-      {{ c.measure("precision-%s" % project.id, "#0000FF", project.precision * 360) }}
-      <h4>Precision</h4>
-      <span class="text-muted">{{ "%4.2f %%" % project.precision }}</span>
-    </div>
-    <div class="col-xs-6 col-sm-3">
-      {{ c.measure("recall-%s" % project.id, "#FF0000", project.recall * 360) }}
-      <h4>Recall</h4>
-      <span class="text-muted">{{ "%4.2f %%" % project.recall }}</span>
-    </div>
-    <div class="col-xs-6 col-sm-3">
-      {{ c.measure("fscore-%s" % project.id, "#FF00FF", fscore * 360) }}
-      <h4>F-Score</h4>
-      <span class="text-muted">{{ "%4.2f %%" % fscore }}</span>
+        <a class="btn btn-default btn-danger" href="#" data-toggle="modal" data-target="#delete-project-confirm-modal">Delete</a>
+        {{ c.confirm_dialog("delete-project-confirm-modal", url_for('delete_project', id=project.id) , "Confirm deletion", '<p>Project %s will be permanently deleted and cannot be recovered. Are you sure?</p>' % project.name) }}
     </div>
   </div>
 
-  <div class="actions">
-    <h2>Actions</h2>
+  <div class="project-tests">
+    <div class="row">
+      <div class="panel panel-info">
+        <div class="panel-heading">Test Results</div>
 
-    <a class="btn btn-default btn-primary" href="{{ url_for('triage_project', id=project.id) }}">Triage</a>
+        <div class="panel-body text-center">
+          <div class="col-xs-6 col-sm-3">
+            {{ c.measure("accuracy-%s" % project.id, "#00FF00", project.accuracy * 360) }}
+            <h4>Accuracy</h4>
+            <span class="text-muted">{{ "%4.2f %%" % project.accuracy }}</span>
+          </div>
+          <div class="col-xs-6 col-sm-3">
+            {{ c.measure("precision-%s" % project.id, "#0000FF", project.precision * 360) }}
+            <h4>Precision</h4>
+            <span class="text-muted">{{ "%4.2f %%" % project.precision }}</span>
+          </div>
+          <div class="col-xs-6 col-sm-3">
+            {{ c.measure("recall-%s" % project.id, "#FF0000", project.recall * 360) }}
+            <h4>Recall</h4>
+            <span class="text-muted">{{ "%4.2f %%" % project.recall }}</span>
+          </div>
+          <div class="col-xs-6 col-sm-3">
+            {{ c.measure("fscore-%s" % project.id, "#FF00FF", fscore * 360) }}
+            <h4>F-Score</h4>
+            <span class="text-muted">{{ "%4.2f %%" % fscore }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-    <a class="btn btn-default btn-danger" href="{{ url_for('edit_project', id=project.id) }}">Edit</a>
+  <div class="triage">
+    <div class="row">
+      <div class="col-md-8">
+        <div class="panel panel-info">
+          <div class="panel-heading">Triage</div>
 
-    <a class="btn btn-default btn-danger" href="#" data-toggle="modal" data-target="#delete-project-confirm-modal">Delete</a>
-    {{ c.confirm_dialog("delete-project-confirm-modal", url_for('delete_project', id=project.id) , "Confirm deletion", '<p>Project %s will be permanently deleted and cannot be recovered. Are you sure?</p>' % project.name) }}
+          <div class="panel-body">
+            <form id="issue-form-triage" role="form" method="POST">
+              {{ form.csrf_token }}
+              
+              {{ f.text_input(form.summary, form.errors.summary) }}
+              {{ f.textarea(form.description, form.errors.description) }}
+              {{ f.submit('Triage', form_group=False) }}
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="panel panel-info">
+          <!-- Default panel contents -->
+          <div class="panel-heading">Predicted Assignees</div>
+
+          <!-- Table -->
+          <table class="table">
+            {% if predictions %}
+              {% for prediction in predictions %}
+                <tr>
+                  <td width="32px" class="text-center"><strong>{{ loop.index }}</strong></td>
+                  <td>
+                  {% if loop.index == 1 %}
+                    <span id="prediction-{{ loop.index }}"
+                          ondblclick="select(this);"><strong>{{ prediction }}</strong></span>
+                  {% else %}
+                    <span id="prediction-{{ loop.index }}"
+                          ondblclick="select(this);">{{ prediction }}</span>
+                  {% endif %}
+                  </td>
+                </tr>
+              {% endfor %}
+            {% else %}
+              <tr><td>No predictions.</td></tr>
+            {% endif %}
+          </table>
+        </div>
+      </div>
+    </div>
   </div>
 {% endblock %}
 

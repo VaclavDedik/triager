@@ -158,3 +158,22 @@ body {
    position: relative;
    margin-left: 5px;
 }
+
+/*
+ * Others
+ */
+.project-actions {
+  margin: 10px;
+  position: relative;
+  bottom: 2px;
+}
+
+.project-actions .btn {
+  padding-top: 4px;
+  padding-bottom:5px
+}
+
+.project-tests {
+  padding-left: 15px;
+  padding-right: 15px;
+}
