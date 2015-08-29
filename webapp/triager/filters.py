@@ -19,6 +19,8 @@ def readable_train_status(value):
         return "Training failed"
     elif value == TrainStatus.NOT_TRAINED:
         return "Not trained"
+    elif value == TrainStatus.QUEUED:
+        return "Queued for training"
     elif value == TrainStatus.TRAINED:
         return "Trained"
     elif value == TrainStatus.TRAINING:
@@ -33,6 +35,8 @@ def train_status_color(value):
         return "danger"
     elif value == TrainStatus.NOT_TRAINED:
         return "primary"
+    elif value == TrainStatus.QUEUED:
+        return "info"
     elif value == TrainStatus.TRAINED:
         return "success"
     elif value == TrainStatus.TRAINING:

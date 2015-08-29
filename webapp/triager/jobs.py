@@ -2,17 +2,22 @@ import os
 import time
 import joblib
 import random
+import logging
 import numpy as np
 
 from classifier import models, selectors, kernels, utils, tests
 
 from triager import db, app
-from models import Project, TrainStatus
+from models import Project, TrainStatus as TS
 
 
 def train_project(id):
     try:
+        logging.info("Started training project %s" % id)
         project = Project.query.get(id)
+        project.train_status = TS.TRAINING
+        db.session.add(project)
+        db.session.commit()
 
         # retrieve data
         # TODO: add to configuration
@@ -20,7 +25,7 @@ def train_project(id):
         data = utils.filter_docs(data, min_class_occur=30)
 
         # create training model
-        print("Training model for project %s" % id)
+        logging.debug("Training model for project %s" % id)
         selector = selectors.TFIDFDecorator(selectors.StopWordsDecorator(
             selectors.BasicSelector()))
         kernel = kernels.GaussianKernel()
@@ -29,10 +34,10 @@ def train_project(id):
 
         # train model
         model.train(data)
-        print("Model for project %s successfully trained" % id)
+        logging.debug("Model for project %s successfully trained" % id)
 
         # create testing model
-        print("Training model for project %s for testing" % id)
+        logging.debug("Training model for project %s for testing" % id)
         selector_test = selectors.TFIDFDecorator(selectors.StopWordsDecorator(
             selectors.BasicSelector()))
         kernel_test = kernels.GaussianKernel()
@@ -50,7 +55,7 @@ def train_project(id):
 
         # train testing model
         model_test.train(data_train)
-        print("Testing model for project %s successfully trained" % id)
+        logging.debug("Testing model for project %s successfully trained" % id)
 
         # testing model
         project.accuracy = tests.accuracy(model_test, data_test)
@@ -62,13 +67,16 @@ def train_project(id):
         if not os.path.exists(dump_dir):
             os.mkdir(dump_dir)
         joblib.dump(model, os.path.join(dump_dir, 'svm.pkl'))
-        project.train_status = TrainStatus.TRAINED
+        project.train_status = TS.TRAINED
         project.last_training = time.time()
         db.session.add(project)
         db.session.commit()
+        logging.info("Project %s successfully trained and updated." % id)
     except Exception as ex:
-        project.train_status = TrainStatus.FAILED
+        logging.error("Failed to train project %s" % id)
+        logging.exception(ex)
+
+        project.train_status = TS.FAILED
         project.training_message = "Reason: %s" % ex
         db.session.add(project)
         db.session.commit()
-        raise ex

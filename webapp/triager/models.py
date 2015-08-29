@@ -5,9 +5,15 @@ from triager import db
 
 class TrainStatus(object):
     NOT_TRAINED = "not_trained"
+    QUEUED = "queued"
     TRAINING = "training"
     TRAINED = "trained"
     FAILED = "failed"
+
+    @classmethod
+    def is_active(cls, status):
+        active_statuses = [cls.TRAINING, cls.FAILED, cls.QUEUED]
+        return status in active_statuses
 
 
 class Project(db.Model):
