@@ -21,7 +21,7 @@ class Configuration(object):
         self.general__ticket_limit = "3000"
         self.general__min_class_occur = "30"
 
-        self.svm__coefficient = "240"
+        self.svm__coefficient = "240.0"
         self.svm__cache_limit = "2000"
 
         self.save()

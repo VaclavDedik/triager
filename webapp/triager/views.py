@@ -19,9 +19,15 @@ def homepage():
     return render_template("index.html", projects=projects)
 
 
-@app.route("/settings")
+@app.route("/settings", methods=['GET', 'POST'])
 def settings():
     form = ConfigurationForm(obj=config)
+
+    if form.validate_on_submit():
+        form.populate_obj(config)
+        config.save()
+        flash("Settings successfully updated")
+        return redirect(url_for("settings"))
 
     return render_template("settings.html", form=form)
 

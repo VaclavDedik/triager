@@ -1,10 +1,10 @@
 import time
 
 from flask_wtf import Form
-from wtforms import StringField
-from wtforms.validators import DataRequired, Length, ValidationError
+from wtforms import StringField, IntegerField, SelectField, FloatField
+from wtforms.validators import DataRequired, Length, NumberRange
+from wtforms.validators import ValidationError, InputRequired
 from wtforms.widgets import TextArea
-from wtforms.fields import SelectField
 from croniter import croniter
 
 
@@ -74,22 +74,34 @@ class IssueForm(Form):
 
 
 class ConfigurationForm(Form):
-    general__ticket_limit = StringField(
+    general__ticket_limit = IntegerField(
         'Ticket limit',
-        validators=[DataRequired()]
+        validators=[
+            InputRequired(),
+            NumberRange(min=1000)
+        ]
     )
 
-    general__min_class_occur = StringField(
+    general__min_class_occur = IntegerField(
         'Minimum number of classes',
-        validators=[DataRequired()]
+        validators=[
+            InputRequired(),
+            NumberRange(min=3)
+        ]
     )
 
-    svm__coefficient = StringField(
+    svm__coefficient = FloatField(
         'SVM coefficient (C parameter)',
-        validators=[DataRequired()]
+        validators=[
+            InputRequired(),
+            NumberRange(min=0.0)
+        ]
     )
 
-    svm__cache_limit = StringField(
+    svm__cache_limit = IntegerField(
         'SVM cache limit',
-        validators=[DataRequired()]
+        validators=[
+            InputRequired(),
+            NumberRange(min=100)
+        ]
     )
