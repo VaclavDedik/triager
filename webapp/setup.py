@@ -14,16 +14,17 @@ setup(
 
     packages=find_packages(),
     install_requires=[
-        'classifier',
-        'Flask',
-        'Jinja2',
+        'classifier==0.1',
+        'Flask==0.10.1',
+        'Jinja2==2.7.2',
         'sqlalchemy==1.0.8',
         'flask-sqlalchemy==2.0',
         'flask-wtf==0.12.0',
         'flask-script==2.0.5',
         'croniter==0.3.8',
         'joblib==0.8.4',
-        'numpy',
-        'pandas'
+        'requests==2.7.0'
+        'numpy==1.8.0rc1',
+        'pandas==0.15.0'
     ],
 )

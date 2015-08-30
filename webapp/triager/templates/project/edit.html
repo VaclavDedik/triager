@@ -8,25 +8,7 @@
   <h1>Edit {{ project.name }}</h1>
 
   <form id="project-form-update" role="form" method="POST">
-    {{ form.csrf_token }}
-
-    {{ f.text_input(form.name, form.errors.name) }}
-    {{ f.select(form.datasource_type, form.errors.datasource_type) }}
-    {% for _, ds_form in ds_forms.items() %}
-      {% if ds_form.populates == "BugzillaDataSource" %}
-        <div id="{{ ds_form.populates }}-fields" class="datasource-fields"
-             style="display: none;">
-          {{ f.text_input(ds_form.bz_filepath, ds_form.errors.bz_filepath)}}
-        </div>
-      {% endif %}
-      {% if ds_form.populates == "MRSDataSource" %}
-        <div id="{{ ds_form.populates }}-fields" class="datasource-fields"
-             style="display: none;">
-          {{ f.text_input(ds_form.mrs_filepath, ds_form.errors.mrs_filepath)}}
-        </div>
-      {% endif %}
-    {% endfor %}
-    {{ f.text_input(form.schedule, form.errors.schedule) }}
+    {% include 'project/_form.html' %}
 
     {{ f.submit('Update') }}
   </form>

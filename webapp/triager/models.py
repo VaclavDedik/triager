@@ -1,6 +1,9 @@
+from classifier.document import Document
+
 import parsers
 
 from triager import db
+from jira import Jira
 
 
 class TrainStatus(object):
@@ -71,3 +74,30 @@ class MRSDataSource(DataSource):
     def get_data(self):
         parser = parsers.MRSParser(folder=self.mrs_filepath)
         return parser.parse()
+
+
+class JiraDataSource(DataSource):
+    jira_api_url = db.Column(db.String(253))
+    jira_project_key = db.Column(db.String(63))
+    jira_statuses = db.Column(db.String(63), default="Resolved,Closed")
+    jira_resolution = db.Column(db.String(63), default="Done")
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'jira'
+    }
+
+    def get_data(self):
+        jira = Jira(self.jira_api_url)
+        jql = "project=%s and status in (%s) and resolution=%s" \
+            % (self.jira_project_key, self.jira_statuses, self.jira_resolution)
+        fields = 'summary,description,assignee,created'
+        raw_issues = jira.find_all(jql, fields, limit=3000)
+
+        data = []
+        for issue in raw_issues:
+            fields = issue['fields']
+            document = Document(fields['summary'], fields['description'],
+                                fields['assignee']['name'])
+            data.append(document)
+
+        return data

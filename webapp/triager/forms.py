@@ -2,7 +2,7 @@ import time
 
 from flask_wtf import Form
 from wtforms import StringField, IntegerField, SelectField, FloatField
-from wtforms.validators import DataRequired, Length, NumberRange
+from wtforms.validators import DataRequired, Length, NumberRange, URL
 from wtforms.validators import ValidationError, InputRequired
 from wtforms.widgets import TextArea
 from croniter import croniter
@@ -71,6 +71,36 @@ class MRSDataSourceForm(DataSourceForm):
             DataRequired(),
             Length(max=1023)
         ]
+    )
+
+
+class JiraDataSourceForm(DataSourceForm):
+    populates = "JiraDataSource"
+    name = "Jira Data Source"
+
+    jira_api_url = StringField(
+        'Jira API URL',
+        validators=[
+            DataRequired(),
+            URL()
+        ]
+    )
+
+    jira_project_key = StringField(
+        'Project key',
+        validators=[DataRequired()]
+    )
+
+    jira_statuses = StringField(
+        'Statuses',
+        validators=[DataRequired()],
+        default="Resolved,Closed"
+    )
+
+    jira_resolution = StringField(
+        'Resolution',
+        validators=[DataRequired()],
+        default="Done"
     )
 
 

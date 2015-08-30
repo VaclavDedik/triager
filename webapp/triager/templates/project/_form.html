@@ -1,0 +1,28 @@
+{{ form.csrf_token }}
+
+{{ f.text_input(form.name, form.errors.name) }}
+{{ f.select(form.datasource_type, form.errors.datasource_type) }}
+{% for _, ds_form in ds_forms.items() %}
+  {% if ds_form.populates == "BugzillaDataSource" %}
+    <div id="{{ ds_form.populates }}-fields" class="datasource-fields"
+         style="display: none;">
+      {{ f.text_input(ds_form.bz_filepath, ds_form.errors.bz_filepath)}}
+    </div>
+  {% endif %}
+  {% if ds_form.populates == "MRSDataSource" %}
+    <div id="{{ ds_form.populates }}-fields" class="datasource-fields"
+         style="display: none;">
+      {{ f.text_input(ds_form.mrs_filepath, ds_form.errors.mrs_filepath)}}
+    </div>
+  {% endif %}
+  {% if ds_form.populates == "JiraDataSource" %}
+    <div id="{{ ds_form.populates }}-fields" class="datasource-fields"
+         style="display: none;">
+      {{ f.text_input(ds_form.jira_api_url, ds_form.errors.jira_api_url)}}
+      {{ f.text_input(ds_form.jira_project_key, ds_form.errors.jira_project_key)}}
+      {{ f.text_input(ds_form.jira_statuses, ds_form.errors.jira_statuses)}}
+      {{ f.text_input(ds_form.jira_resolution, ds_form.errors.jira_resolution)}}
+    </div>
+  {% endif %}
+{% endfor %}
+{{ f.text_input(form.schedule, form.errors.schedule) }}
