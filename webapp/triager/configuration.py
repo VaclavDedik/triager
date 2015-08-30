@@ -22,7 +22,7 @@ class Configuration(object):
         self.general__min_class_occur = "30"
 
         self.svm__coefficient = "240.0"
-        self.svm__cache_limit = "2000"
+        self.svm__cache_size = "2000"
 
         self.save()
 

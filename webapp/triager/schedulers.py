@@ -1,4 +1,3 @@
-import os
 import time
 import signal
 import logging
@@ -7,7 +6,7 @@ from multiprocessing import Pool
 from flask.ext.script import Command
 
 from croniter import croniter
-from triager import jobs, db, app
+from triager import jobs, db
 from models import Project, TrainStatus as TS
 
 

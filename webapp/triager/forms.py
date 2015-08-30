@@ -52,7 +52,20 @@ class BugzillaDataSourceForm(DataSourceForm):
     populates = "BugzillaDataSource"
     name = "Bugzilla Data Source"
 
-    filepath = StringField(
+    bz_filepath = StringField(
+        'File Path',
+        validators=[
+            DataRequired(),
+            Length(max=1023)
+        ]
+    )
+
+
+class MRSDataSourceForm(DataSourceForm):
+    populates = "MRSDataSource"
+    name = "MRS Data Source"
+
+    mrs_filepath = StringField(
         'File Path',
         validators=[
             DataRequired(),
@@ -98,7 +111,7 @@ class ConfigurationForm(Form):
         ]
     )
 
-    svm__cache_limit = IntegerField(
+    svm__cache_size = IntegerField(
         'SVM cache limit',
         validators=[
             InputRequired(),

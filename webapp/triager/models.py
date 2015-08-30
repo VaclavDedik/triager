@@ -45,14 +45,29 @@ class DataSource(db.Model):
         'polymorphic_on': type
     }
 
+    def get_data(self):
+        raise NotImplementedError()
+
 
 class BugzillaDataSource(DataSource):
-    filepath = db.Column(db.String(1023), nullable=False)
+    bz_filepath = db.Column(db.String(1023))
 
     __mapper_args__ = {
         'polymorphic_identity': 'bugzilla'
     }
 
     def get_data(self):
-        parser = parsers.BugzillaParser(folder=self.filepath)
+        parser = parsers.BugzillaParser(folder=self.bz_filepath)
+        return parser.parse()
+
+
+class MRSDataSource(DataSource):
+    mrs_filepath = db.Column(db.String(1023))
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'mrs'
+    }
+
+    def get_data(self):
+        parser = parsers.MRSParser(folder=self.mrs_filepath)
         return parser.parse()

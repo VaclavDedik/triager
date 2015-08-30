@@ -9,7 +9,7 @@ from classifier.document import Document
 from flask import render_template, flash, redirect, url_for
 
 from triager import app, db, config
-from models import Project
+from models import Project, TrainStatus as TS
 from forms import ProjectForm, IssueForm, DataSourceForm, ConfigurationForm
 
 
@@ -39,7 +39,8 @@ def view_project(id):
     form = IssueForm()
     predictions = []
     model_path = os.path.join(app.config['MODEL_FOLDER'], '%s/svm.pkl' % id)
-    trained = os.path.isfile(model_path)
+    trained = project.train_status != TS.NOT_TRAINED \
+        and os.path.isfile(model_path)
 
     if trained and form.validate_on_submit():
         issue = Document(form.summary.data, form.description.data)

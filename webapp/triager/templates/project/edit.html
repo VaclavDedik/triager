@@ -16,7 +16,13 @@
       {% if ds_form.populates == "BugzillaDataSource" %}
         <div id="{{ ds_form.populates }}-fields" class="datasource-fields"
              style="display: none;">
-          {{ f.text_input(ds_form.filepath, ds_form.errors.filepath)}}
+          {{ f.text_input(ds_form.bz_filepath, ds_form.errors.bz_filepath)}}
+        </div>
+      {% endif %}
+      {% if ds_form.populates == "MRSDataSource" %}
+        <div id="{{ ds_form.populates }}-fields" class="datasource-fields"
+             style="display: none;">
+          {{ f.text_input(ds_form.mrs_filepath, ds_form.errors.mrs_filepath)}}
         </div>
       {% endif %}
     {% endfor %}
