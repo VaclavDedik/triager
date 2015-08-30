@@ -71,3 +71,25 @@ class IssueForm(Form):
         'Description',
         widget=TextArea()
     )
+
+
+class ConfigurationForm(Form):
+    general__ticket_limit = StringField(
+        'Ticket limit',
+        validators=[DataRequired()]
+    )
+
+    general__min_class_occur = StringField(
+        'Minimum number of classes',
+        validators=[DataRequired()]
+    )
+
+    svm__coefficient = StringField(
+        'SVM coefficient (C parameter)',
+        validators=[DataRequired()]
+    )
+
+    svm__cache_limit = StringField(
+        'SVM cache limit',
+        validators=[DataRequired()]
+    )

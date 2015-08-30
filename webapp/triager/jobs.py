@@ -7,7 +7,7 @@ import numpy as np
 
 from classifier import models, selectors, kernels, utils, tests
 
-from triager import db, app
+from triager import db, app, config
 from models import Project, TrainStatus as TS
 
 
@@ -19,10 +19,16 @@ def train_project(id):
         db.session.add(project)
         db.session.commit()
 
+        # Config
+        ticket_limit = int(config.general__ticket_limit)
+        min_class_occur = int(config.general__min_class_occur)
+        C = float(config.svm__coefficient)
+        cache_size = int(config.svm__cache_size)
+
         # retrieve data
         # TODO: add to configuration
-        data = project.datasource.get_data()[-3000:]
-        data = utils.filter_docs(data, min_class_occur=30)
+        data = project.datasource.get_data()[-ticket_limit:]
+        data = utils.filter_docs(data, min_class_occur=min_class_occur)
 
         # create training model
         logging.debug("Training model for project %s" % id)
@@ -30,7 +36,8 @@ def train_project(id):
             selectors.BasicSelector()))
         kernel = kernels.GaussianKernel()
         model = models.SVMModel(
-            feature_selector=selector, kernel=kernel, C=240, cache_size=2000)
+            feature_selector=selector, kernel=kernel,
+            C=C, cache_size=cache_size)
 
         # train model
         model.train(data)
@@ -43,7 +50,7 @@ def train_project(id):
         kernel_test = kernels.GaussianKernel()
         model_test = models.SVMModel(
             feature_selector=selector_test, kernel=kernel_test,
-            C=240, cache_size=2000)
+            C=C, cache_size=cache_size)
 
         # split data for testing
         random.shuffle(data)

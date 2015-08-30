@@ -8,15 +8,22 @@ from classifier import tests
 from classifier.document import Document
 from flask import render_template, flash, redirect, url_for
 
-from triager import app, db
+from triager import app, db, config
 from models import Project
-from forms import ProjectForm, IssueForm, DataSourceForm
+from forms import ProjectForm, IssueForm, DataSourceForm, ConfigurationForm
 
 
 @app.route("/")
 def homepage():
     projects = Project.query
     return render_template("index.html", projects=projects)
+
+
+@app.route("/settings")
+def settings():
+    form = ConfigurationForm(obj=config)
+
+    return render_template("settings.html", form=form)
 
 
 @app.route("/project/<id>", methods=['GET', 'POST'])
