@@ -2,6 +2,7 @@ import time
 import signal
 import logging
 
+from datetime import datetime
 from multiprocessing import Pool
 from flask.ext.script import Command
 
@@ -34,6 +35,15 @@ class RetrainScheduler(Command):
                 crontab = croniter(project.schedule, project.last_training)
                 nextrun = crontab.get_next()
                 status = project.train_status
+
+                p_format = '%Y-%m-%d %H:%M:%S'
+                p_last_training = datetime.fromtimestamp(
+                    project.last_training).strftime(p_format)
+                p_nextrun = datetime.fromtimestamp(
+                    nextrun).strftime(p_format)
+
+                logging.debug("Project %s last build %s, next build %s"
+                              % (project.id, p_last_training, p_nextrun))
 
                 if nextrun <= time.time():
                     if not TS.is_active(status):
