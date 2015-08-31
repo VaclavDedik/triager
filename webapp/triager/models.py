@@ -94,7 +94,7 @@ class JiraDataSource(DataSource):
                      self.jira_resolution)
         fields = 'summary,description,assignee,created'
         raw_issues = jira.find_all(jql, fields,
-                                   limit=config.general__ticket_limit)
+                                   limit=int(config.general__ticket_limit))
 
         data = []
         for issue in raw_issues:
