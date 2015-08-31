@@ -163,14 +163,14 @@ body {
  * Others
  */
 .project-actions {
-  margin: 10px;
+  margin: 5px;
   position: relative;
-  bottom: 2px;
+  bottom: 7px;
 }
 
 .project-actions .btn {
-  padding-top: 4px;
-  padding-bottom:5px
+  padding-top: 3px;
+  padding-bottom:4px
 }
 
 .project-tests {
@@ -180,4 +180,9 @@ body {
 
 .panel-table p {
   padding: 7px;
+}
+
+.project-title {
+  margin-top: 20px;
+  margin-bottom: 10px;
 }

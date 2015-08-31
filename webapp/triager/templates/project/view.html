@@ -6,7 +6,7 @@
 {% block title %}Triager :: View {{ project.name }}{% endblock %}
 
 {% block content %}
-  <div class="h1 project-title">
+  <div class="project-title">
     <h1 class="inline">{{ project.name }}</h1>
     <h3 class="inline status">
       <span class="label label-{{ project.train_status | train_status_color}}">{{ project.train_status | readable_train_status }}
