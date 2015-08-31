@@ -56,9 +56,6 @@ target/
 # Mac OS X files
 .DS_Store
 
-# Data
-/data
-
 # Nohup
 nohup.out
 
@@ -82,7 +79,7 @@ thesis.pdf
 .ipynb_checkpoints
 
 # others
-/webapp/data/settings.cfg
-/webapp/data/triager.db
-/webapp/data/model/*
-!/webapp/data/model/.gitkeep
+/data/settings.cfg
+/data/triager.db
+/data/model/*
+!/data/model/.gitkeep
