@@ -66,7 +66,9 @@ class BasicSelector(AbstractSelector):
 
         docs_vector = []
         for document in documents:
-            docs_vector.append(document.title + "\n" + document.content)
+            title = document.title if document.title else ""
+            content = document.content if document.content else ""
+            docs_vector.append(title + "\n" + content)
             Y.append(self.labels.index(document.label))
 
         self.count_vect = CountVectorizer(decode_error="replace")
@@ -81,7 +83,9 @@ class BasicSelector(AbstractSelector):
         together) that occur in the field ``features``.
         """
 
-        words = document.title + "\n" + document.content
+        title = document.title if document.title else ""
+        content = document.content if document.content else ""
+        words = title + "\n" + content
         return np.array(self.count_vect.transform([words]).todense())
 
     def _build_labels(self, documents):
