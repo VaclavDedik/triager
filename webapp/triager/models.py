@@ -2,7 +2,7 @@ from classifier.document import Document
 
 import parsers
 
-from triager import db
+from triager import db, config
 from jira import Jira
 
 
@@ -88,10 +88,13 @@ class JiraDataSource(DataSource):
 
     def get_data(self):
         jira = Jira(self.jira_api_url)
-        jql = "project=%s and status in (%s) and resolution=%s" \
-            % (self.jira_project_key, self.jira_statuses, self.jira_resolution)
+        jql = "project=%s and status in (%s) " + \
+              "and resolution=%s and assignee!=null"
+        jql = jql % (self.jira_project_key, self.jira_statuses,
+                     self.jira_resolution)
         fields = 'summary,description,assignee,created'
-        raw_issues = jira.find_all(jql, fields, limit=3000)
+        raw_issues = jira.find_all(jql, fields,
+                                   limit=config.general__ticket_limit)
 
         data = []
         for issue in raw_issues:
