@@ -1,5 +1,6 @@
 from wtforms.validators import ValidationError
 from flask.ext.login import UserMixin
+from flask import flash, redirect, url_for
 
 from triager import login_manager, config
 from utils import hash_pwd
@@ -12,6 +13,13 @@ class User(UserMixin):
     @property
     def id(self):
         return self.username
+
+
+@login_manager.unauthorized_handler
+def unauthorized():
+    flash("Unauthorized access. If you want to access the page, log in first.",
+          'error')
+    return redirect(url_for('login'))
 
 
 @login_manager.user_loader
