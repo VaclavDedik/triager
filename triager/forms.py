@@ -28,7 +28,7 @@ class ProjectForm(Form):
         'Name',
         validators=[
             DataRequired(),
-            Length(min=4, max=50)
+            Length(min=1, max=50)
         ]
     )
 
