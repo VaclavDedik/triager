@@ -7,6 +7,8 @@ from wtforms.validators import ValidationError, InputRequired
 from wtforms.widgets import TextArea
 from croniter import croniter
 
+from triager import config
+
 
 #
 # Validators
@@ -40,7 +42,7 @@ class ProjectForm(Form):
             DataRequired(),
             validate_cron_format
         ],
-        default="0 0 * * *"
+        default=config.defaults__schedule
     )
 
 
@@ -94,13 +96,13 @@ class JiraDataSourceForm(DataSourceForm):
     jira_statuses = StringField(
         'Statuses',
         validators=[DataRequired()],
-        default="Resolved,Closed"
+        default=config.jira__default_status
     )
 
     jira_resolution = StringField(
         'Resolution',
         validators=[DataRequired()],
-        default="Done"
+        default=config.jira__default_resolution
     )
 
 
@@ -133,6 +135,14 @@ class ConfigurationForm(Form):
         ]
     )
 
+    defaults__schedule = StringField(
+        'Schedule',
+        validators=[
+            DataRequired(),
+            validate_cron_format
+        ]
+    )
+
     svm__coefficient = FloatField(
         'SVM coefficient (C parameter)',
         validators=[
@@ -147,4 +157,14 @@ class ConfigurationForm(Form):
             InputRequired(),
             NumberRange(min=100)
         ]
+    )
+
+    jira__default_status = StringField(
+        'Default Statuses',
+        validators=[DataRequired()]
+    )
+
+    jira__default_resolution = StringField(
+        'Default Resolution',
+        validators=[DataRequired()]
     )

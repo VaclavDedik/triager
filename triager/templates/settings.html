@@ -18,10 +18,23 @@
     </fieldset>
 
     <fieldset>
+      <legend>Defaults</legend>
+
+      {{ f.text_input(form.defaults__schedule, form.errors.defaults__schedule) }}
+    </fieldset>
+
+    <fieldset>
       <legend>Model settings</legend>
 
       {{ f.text_input(form.svm__coefficient, form.errors.svm__coefficient) }}
       {{ f.text_input(form.svm__cache_size, form.errors.svm__cache_size) }}
+    </fieldset>
+
+    <fieldset>
+      <legend>Jira Data Source settings</legend>
+
+      {{ f.text_input(form.jira__default_status, form.errors.jira__default_status) }}
+      {{ f.text_input(form.jira__default_resolution, form.errors.jira__default_resolution) }}
     </fieldset>
 
     {{ f.submit('Save') }}
