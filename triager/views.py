@@ -14,6 +14,7 @@ from models import Project, TrainStatus as TS
 from forms import ProjectForm, IssueForm, DataSourceForm, ConfigurationForm
 from forms import LoginForm
 from auth import User
+from utils import hash_pwd
 
 
 @app.route("/")
@@ -28,10 +29,20 @@ def settings():
     form = ConfigurationForm(obj=config)
 
     if form.validate_on_submit():
+        # auth__admin is special, because it needs to be hashed before being
+        # passed to the config and saved
+        auth__admin = form.auth__admin.data
+        form.auth__admin.data = None
         form.populate_obj(config)
+        if auth__admin:
+            config.auth__admin = hash_pwd(auth__admin)
+
         config.save()
         flash("Settings successfully updated")
         return redirect(url_for("settings"))
+
+    # No need to present a hash digest to the user :)
+    form.auth__admin.data = None
 
     return render_template("settings.html", form=form)
 

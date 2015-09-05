@@ -2,6 +2,7 @@ from wtforms.validators import ValidationError
 from flask.ext.login import UserMixin
 
 from triager import login_manager, config
+from utils import hash_pwd
 
 
 class User(UserMixin):
@@ -35,5 +36,5 @@ def validate_password(form, password_field):
     config.reload()
     if not (config.config.has_section("auth")
             and config.config.has_option("auth", username)
-            and config.config.get("auth", username) == password):
+            and config.config.get("auth", username) == hash_pwd(password)):
         raise ValidationError("Wrong username or password")

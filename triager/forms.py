@@ -187,6 +187,5 @@ class ConfigurationForm(Form):
     )
 
     auth__admin = StringField(
-        'Admin password',
-        validators=[DataRequired()]
+        'New admin password'
     )

@@ -2,6 +2,8 @@ import os
 
 from ConfigParser import SafeConfigParser
 
+from utils import hash_pwd
+
 
 class Configuration(object):
     def __init__(self, config_dir):
@@ -32,7 +34,7 @@ class Configuration(object):
         self.jira__default_resolutions = "Fixed"
         self.jira__default_status = "Resolved,Closed"
 
-        self.auth__admin = "admin"
+        self.auth__admin = hash_pwd("admin")
 
         self.save()
 
@@ -56,7 +58,8 @@ class Configuration(object):
             if not self.config.has_section(section):
                 self.config.add_section(section)
 
-            self.config.set(section, option, str(value))
+            if value:
+                self.config.set(section, option, str(value))
         elif name in ['config_file', 'config']:
             super(Configuration, self).__setattr__(name, value)
         else:
