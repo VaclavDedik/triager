@@ -29,8 +29,10 @@ class Configuration(object):
         self.svm__coefficient = "240.0"
         self.svm__cache_size = "2000"
 
-        self.jira__default_resolution = "Fixed"
+        self.jira__default_resolutions = "Fixed"
         self.jira__default_status = "Resolved,Closed"
+
+        self.auth__admin = "admin"
 
         self.save()
 

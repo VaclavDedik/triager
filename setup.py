@@ -21,6 +21,7 @@ setup(
         'flask-sqlalchemy>=2.0',
         'flask-wtf>=0.12.0',
         'flask-script>=2.0.5',
+        'flask-login>=0.2.11',
         'croniter>=0.3.8',
         'joblib>=0.8.4',
         'requests>=2.7.0',

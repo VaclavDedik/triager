@@ -2,12 +2,14 @@ import time
 
 from flask_wtf import Form
 from wtforms import StringField, IntegerField, SelectField, FloatField
+from wtforms import PasswordField
 from wtforms.validators import DataRequired, Length, NumberRange, URL
 from wtforms.validators import ValidationError, InputRequired
 from wtforms.widgets import TextArea
 from croniter import croniter
 
 from triager import config
+from triager import auth
 
 
 #
@@ -16,13 +18,28 @@ from triager import config
 def validate_cron_format(form, field):
     try:
         croniter(field.data, time.time())
-    except Exception as ex:
+    except Exception:
         raise ValidationError('Training Schedule must be in a CRON format.')
 
 
 #
 # Forms
 #
+class LoginForm(Form):
+    username = StringField(
+        'Username',
+        validators=[DataRequired()]
+    )
+
+    password = PasswordField(
+        'Password',
+        validators=[
+            DataRequired(),
+            auth.validate_password
+        ]
+    )
+
+
 class ProjectForm(Form):
     name = StringField(
         'Name',
@@ -99,10 +116,10 @@ class JiraDataSourceForm(DataSourceForm):
         default=config.jira__default_status
     )
 
-    jira_resolution = StringField(
-        'Resolution',
+    jira_resolutions = StringField(
+        'Resolutions',
         validators=[DataRequired()],
-        default=config.jira__default_resolution
+        default=config.jira__default_resolutions
     )
 
 
@@ -160,11 +177,16 @@ class ConfigurationForm(Form):
     )
 
     jira__default_status = StringField(
-        'Default Statuses',
+        'Default statuses',
         validators=[DataRequired()]
     )
 
-    jira__default_resolution = StringField(
-        'Default Resolution',
+    jira__default_resolutions = StringField(
+        'Default resolutions',
+        validators=[DataRequired()]
+    )
+
+    auth__admin = StringField(
+        'Admin password',
         validators=[DataRequired()]
     )

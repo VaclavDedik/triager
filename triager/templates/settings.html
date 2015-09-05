@@ -18,6 +18,12 @@
     </fieldset>
 
     <fieldset>
+      <legend>Authentication</legend>
+
+      {{ f.text_input(form.auth__admin, form.errors.auth__admin) }}
+    </fieldset>
+
+    <fieldset>
       <legend>Defaults</legend>
 
       {{ f.text_input(form.defaults__schedule, form.errors.defaults__schedule) }}
@@ -34,7 +40,7 @@
       <legend>Jira Data Source settings</legend>
 
       {{ f.text_input(form.jira__default_status, form.errors.jira__default_status) }}
-      {{ f.text_input(form.jira__default_resolution, form.errors.jira__default_resolution) }}
+      {{ f.text_input(form.jira__default_resolutions, form.errors.jira__default_resolutions) }}
     </fieldset>
 
     {{ f.submit('Save') }}

@@ -1,0 +1,18 @@
+{% import 'macros/_forms.html' as f %}
+
+{% extends 'base.html' %}
+
+{% block title %}Triager :: Log in{% endblock %}
+
+{% block content %}
+  <h1>Log in</h1>
+
+  <form id="login-form" role="form" method="POST">
+    {{ form.csrf_token }}
+
+    {{ f.text_input(form.username, form.errors.username) }}
+    {{ f.text_input(form.password, form.errors.password) }}
+
+    {{ f.submit('Log in') }}
+  </form>
+{% endblock %}

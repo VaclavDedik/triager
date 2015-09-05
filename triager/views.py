@@ -7,10 +7,13 @@ import models
 from classifier import tests
 from classifier.document import Document
 from flask import render_template, flash, redirect, url_for
+from flask.ext.login import login_user, login_required, logout_user
 
 from triager import app, db, config
 from models import Project, TrainStatus as TS
 from forms import ProjectForm, IssueForm, DataSourceForm, ConfigurationForm
+from forms import LoginForm
+from auth import User
 
 
 @app.route("/")
@@ -20,6 +23,7 @@ def homepage():
 
 
 @app.route("/settings", methods=['GET', 'POST'])
+@login_required
 def settings():
     form = ConfigurationForm(obj=config)
 
@@ -30,6 +34,27 @@ def settings():
         return redirect(url_for("settings"))
 
     return render_template("settings.html", form=form)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User()
+        form.populate_obj(user)
+        login_user(user)
+
+        flash('Logged in successfully.')
+        return redirect(url_for('homepage'))
+    return render_template('login.html', form=form)
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash("Logged out successfully.")
+    return redirect(url_for('homepage'))
 
 
 @app.route("/project/<id>", methods=['GET', 'POST'])
@@ -58,6 +83,7 @@ def view_project(id):
 
 
 @app.route("/project/create", methods=['GET', 'POST'])
+@login_required
 def create_project():
     form = ProjectForm()
     ds_forms = dict([
@@ -87,6 +113,7 @@ def create_project():
 
 
 @app.route("/project/<id>/edit", methods=['GET', 'POST'])
+@login_required
 def edit_project(id):
     project = Project.query.get_or_404(id)
 
@@ -120,6 +147,7 @@ def edit_project(id):
 
 
 @app.route("/project/<id>/delete", methods=['POST'])
+@login_required
 def delete_project(id):
     project = Project.query.get_or_404(id)
 
@@ -158,5 +186,5 @@ def scheduler_running_check():
         except OSError:
             # Scheduler not running
             pass
-    
+
     return result

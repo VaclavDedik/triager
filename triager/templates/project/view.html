@@ -15,12 +15,14 @@
         {% endif %}
       </span>
     </h3>
+    {% if current_user.is_authenticated() %}
     <div class="inline project-actions">
         <a class="btn btn-default btn-warning" href="{{ url_for('edit_project', id=project.id) }}">Edit</a>
 
         <a class="btn btn-default btn-danger" href="#" data-toggle="modal" data-target="#delete-project-confirm-modal">Delete</a>
         {{ c.confirm_dialog("delete-project-confirm-modal", url_for('delete_project', id=project.id) , "Confirm deletion", '<p>Project %s will be permanently deleted and cannot be recovered. Are you sure?</p>' % project.name) }}
     </div>
+    {% endif %}
   </div>
 
   <div class="project-tests">
