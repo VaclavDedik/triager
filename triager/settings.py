@@ -9,6 +9,9 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))
 STORAGE_FOLDER = os.path.join(APP_ROOT, '../data')
 MODEL_FOLDER = os.path.join(STORAGE_FOLDER, 'model')
 
+#: Important files
+SCHEDULER_PID_FILE = os.path.join(STORAGE_FOLDER, 'scheduler.pid')
+
 #: Logging level.
 LOG_LEVEL = logging.DEBUG if DEBUG else logging.INFO
 

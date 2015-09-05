@@ -1,3 +1,4 @@
+import os
 import time
 import signal
 import logging
@@ -7,7 +8,7 @@ from multiprocessing import Pool
 from flask.ext.script import Command
 
 from croniter import croniter
-from triager import jobs, db
+from triager import jobs, db, app
 from models import Project, TrainStatus as TS
 
 
@@ -63,6 +64,10 @@ class RetrainScheduler(Command):
         signal.signal(signal.SIGINT, signal.SIG_IGN)
 
     def run(self):
+        # Save scheduler.pid in data directory
+        with open(app.config['SCHEDULER_PID_FILE'], 'w') as f:
+            f.write(str(os.getpid()))
+
         # Check projects that are in QUEUED and TRAINING statues and move
         # them to FAILED
         projects = Project.query

@@ -142,3 +142,21 @@ def delete_project(id):
 def all_projects():
     projects = db.session.query(Project.id, Project.name)
     return dict(all_projects=projects)
+
+
+@app.context_processor
+def scheduler_running_check():
+    result = dict(is_scheduler_running=False)
+    scheduler_pid_file = app.config['SCHEDULER_PID_FILE']
+
+    if os.path.isfile(scheduler_pid_file):
+        with open(scheduler_pid_file, 'r') as f:
+            scheduler_pid = int(f.read())
+        try:
+            os.kill(scheduler_pid, 0)
+            result['is_scheduler_running'] = True
+        except OSError:
+            # Scheduler not running
+            pass
+    
+    return result

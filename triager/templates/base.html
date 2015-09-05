@@ -39,7 +39,16 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Triager</a>
+          <a class="navbar-brand" href="{{ url_for('homepage') }}">Triager</a>
+          {% if not is_scheduler_running %}
+          <h4 class="navbar-text">
+            <span class="label label-danger">
+              <span>Scheduler is not running!</span>
+              <span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" data-placement="right" 
+                    title="Retraining of the projects won't work untill you start the scheduler."></span>
+            </span>
+          </h4>
+        {% endif %}
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
@@ -95,6 +104,13 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+
+    <!-- Global script -->
+    <script type="text/javascript">
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+    </script>
 
     <!-- Custom scripts -->
     {% block js %}{% endblock %}
