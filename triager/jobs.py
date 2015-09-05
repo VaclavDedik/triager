@@ -20,6 +20,7 @@ def train_project(id):
         db.session.commit()
 
         # Config
+        config.reload()
         ticket_limit = int(config.general__ticket_limit)
         min_class_occur = int(config.general__min_class_occur)
         C = float(config.svm__coefficient)

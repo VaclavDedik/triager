@@ -9,13 +9,16 @@ class Configuration(object):
         self.config = SafeConfigParser()
 
         if os.path.isfile(self.config_file):
-            self.config.read([self.config_file])
+            self.reload()
         else:
             self._setup_config()
 
     def save(self):
         with open(self.config_file, 'w') as f:
             self.config.write(f)
+
+    def reload(self):
+        self.config.read([self.config_file])
 
     def _setup_config(self):
         self.general__ticket_limit = "3000"
