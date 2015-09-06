@@ -198,3 +198,8 @@ body {
 .prediction-index {
   font-size: 24px;
 }
+
+.test-results-show {
+  padding: 1px 8px;
+  margin: 0 5px;
+}

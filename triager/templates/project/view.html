@@ -28,28 +28,34 @@
   <div class="project-tests">
     <div class="row">
       <div class="panel panel-info">
-        <div class="panel-heading">Test Results</div>
+        <div class="panel-heading">
+          <span>Test Results</span>
+          <a class="btn btn-info test-results-show" role="button" data-toggle="collapse" href="#test-results" 
+             aria-expanded="false" aria-controls="test-results">Show</a>
+        </div>
 
-        <div class="panel-body text-center">
-          <div class="col-xs-6 col-sm-3">
-            {{ c.measure("accuracy-%s" % project.id, "#00FF00", project.accuracy * 360) }}
-            <h4>Accuracy</h4>
-            <span class="text-muted">{{ "%4.2f %%" % project.accuracy }}</span>
-          </div>
-          <div class="col-xs-6 col-sm-3">
-            {{ c.measure("precision-%s" % project.id, "#0000FF", project.precision * 360) }}
-            <h4>Precision</h4>
-            <span class="text-muted">{{ "%4.2f %%" % project.precision }}</span>
-          </div>
-          <div class="col-xs-6 col-sm-3">
-            {{ c.measure("recall-%s" % project.id, "#FF0000", project.recall * 360) }}
-            <h4>Recall</h4>
-            <span class="text-muted">{{ "%4.2f %%" % project.recall }}</span>
-          </div>
-          <div class="col-xs-6 col-sm-3">
-            {{ c.measure("fscore-%s" % project.id, "#FF00FF", fscore * 360) }}
-            <h4>F-Score</h4>
-            <span class="text-muted">{{ "%4.2f %%" % fscore }}</span>
+        <div id="test-results" class="collapse">
+          <div class="panel-body text-center">
+            <div class="col-xs-6 col-sm-3">
+              {{ c.measure("accuracy-%s" % project.id, "#00FF00", project.accuracy * 360) }}
+              <h4>Accuracy</h4>
+              <span class="text-muted">{{ "%4.2f %%" % project.accuracy }}</span>
+            </div>
+            <div class="col-xs-6 col-sm-3">
+              {{ c.measure("precision-%s" % project.id, "#0000FF", project.precision * 360) }}
+              <h4>Precision</h4>
+              <span class="text-muted">{{ "%4.2f %%" % project.precision }}</span>
+            </div>
+            <div class="col-xs-6 col-sm-3">
+              {{ c.measure("recall-%s" % project.id, "#FF0000", project.recall * 360) }}
+              <h4>Recall</h4>
+              <span class="text-muted">{{ "%4.2f %%" % project.recall }}</span>
+            </div>
+            <div class="col-xs-6 col-sm-3">
+              {{ c.measure("fscore-%s" % project.id, "#FF00FF", fscore * 360) }}
+              <h4>F-Score</h4>
+              <span class="text-muted">{{ "%4.2f %%" % fscore }}</span>
+            </div>
           </div>
         </div>
       </div>
