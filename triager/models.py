@@ -50,8 +50,8 @@ class Feedback(db.Model):
     project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
     project = db.relationship("Project")
 
-    selected_recommendation = db.Column(db.Integer)
-    confirmed_recommendation = db.Column(db.Integer)
+    selected_recommendation = db.Column(db.Integer, default=0)
+    confirmed_recommendation = db.Column(db.Integer, default=0)
 
     @classmethod
     def get_id_from_doc(cls, document, project=None):

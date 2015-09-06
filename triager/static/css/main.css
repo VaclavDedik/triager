@@ -159,6 +159,10 @@ body {
    margin-left: 5px;
 }
 
+.copyable {
+  cursor: text;
+}
+
 /*
  * Others
  */
@@ -185,4 +189,12 @@ body {
 .project-title {
   margin-top: 20px;
   margin-bottom: 10px;
+}
+
+.primary-prediction {
+  font-weight: bold;
+}
+
+.prediction-index {
+  font-size: 24px;
 }

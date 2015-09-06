@@ -88,17 +88,13 @@
             {% if predictions %}
               {% for prediction in predictions %}
                 <tr class="prediction-row" data-recommendation-id="{{ loop.index }}">
-                  <td width="32px" class="text-center"><strong>{{ loop.index }}</strong></td>
+                  <td width="50px" class="text-center prediction-index"><strong>{{ loop.index }}</strong></td>
                   <td>
-                  {% if loop.index == 1 %}
-                    <span id="prediction-{{ loop.index }}"
-                          ondblclick="select(this);"><strong>{{ prediction }}</strong></span>
-                  {% else %}
-                    <span id="prediction-{{ loop.index }}"
-                          ondblclick="select(this);">{{ prediction }}</span>
-                  {% endif %}
+                    <input id="prediction-{{ loop.index }}" readonly="readonly" onclick="this.select();"
+                           class="form-control copyable {%if loop.index == 1%}primary-prediction{%endif%}"
+                           value="{{ prediction }}">
                   </td>
-                  <td align="right">
+                  <td width="50px" align="right">
                     <form id="feedback-form-{{ loop.index }}" class="feedback-form" style="display: none;">
                       {{ feedback_form.csrf_token }}
 
