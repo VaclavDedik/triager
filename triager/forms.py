@@ -135,6 +135,11 @@ class IssueForm(Form):
     )
 
 
+class FeedbackForm(IssueForm):
+    selected_recommendation = IntegerField(default=0)
+    confirmed_recommendation = IntegerField(default=0)
+
+
 class ConfigurationForm(Form):
     general__ticket_limit = IntegerField(
         'Ticket limit',

@@ -87,7 +87,7 @@
           <table class="table panel-table">
             {% if predictions %}
               {% for prediction in predictions %}
-                <tr>
+                <tr class="prediction-row" data-recommendation-id="{{ loop.index }}">
                   <td width="32px" class="text-center"><strong>{{ loop.index }}</strong></td>
                   <td>
                   {% if loop.index == 1 %}
@@ -98,8 +98,42 @@
                           ondblclick="select(this);">{{ prediction }}</span>
                   {% endif %}
                   </td>
+                  <td align="right">
+                    <form id="feedback-form-{{ loop.index }}" class="feedback-form" style="display: none;">
+                      {{ feedback_form.csrf_token }}
+
+                      {{ feedback_form.summary(class='feedback-summary') }}
+                      {{ feedback_form.description(class='feedback-description') }}
+                      {{ feedback_form.selected_recommendation(class='feedback-selected_recommendation') }}
+                      {{ feedback_form.confirmed_recommendation(class='feedback-confirmed_recommendation') }}
+                    </form>
+                    <button id="confirm-recommendation-{{ loop.index }}"
+                            class="btn btn-{%if feedback_form.confirmed_recommendation.data == loop.index%}success{%else%}default{%endif%} confirm-recommendation"
+                            data-recommendation-id="{{ loop.index }}"
+                            title="Confirm this is the correct assignee for this ticket">
+                      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    </button>
+                  </td>
                 </tr>
               {% endfor %}
+              <tr>
+                <td align="right" colspan="3">
+                  <form id="feedback-form-999" class="feedback-form" style="display: none;">
+                      {{ feedback_form.csrf_token }}
+
+                      {{ feedback_form.summary(class='feedback-summary') }}
+                      {{ feedback_form.description(class='feedback-description') }}
+                      {{ feedback_form.selected_recommendation(class='feedback-selected_recommendation') }}
+                      {{ feedback_form.confirmed_recommendation(class='feedback-confirmed_recommendation') }}
+                    </form>
+                    <button id="confirm-recommendation-999"
+                            class="btn btn-{%if feedback_form.confirmed_recommendation.data == 999%}danger{%else%}default{%endif%} confirm-recommendation"
+                            data-recommendation-id="999"
+                            title="None of the assignees are correct">
+                      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                    </button>
+                </td>
+              </tr>
             {% else %}
               <tr><td><p>No predictions. Start triaging by filling the form on the left and clicking on triage.</p></td></tr>
             {% endif %}
@@ -108,4 +142,52 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block js %}
+  <script type="text/javascript">
+  $(function () {
+    $(".confirm-recommendation").each(function(i, elem) {
+      $(elem).click(function () {
+        var recommendation_id = $(elem).attr("data-recommendation-id")
+        var $form = $("#feedback-form-" + recommendation_id)
+        $(".feedback-confirmed_recommendation").val(0)
+        $form.find(".feedback-confirmed_recommendation").val(recommendation_id)
+
+        $.ajax({
+          url: "{{ url_for('post_feedback', id=project.id) }}",
+          type: "POST",
+          data: $form.serialize(),
+          success: function () {
+            $(".confirm-recommendation").removeClass("btn-success").addClass("btn-default")
+            $("#confirm-recommendation-999").removeClass("btn-danger").addClass("btn-default")
+            $(elem).removeClass("btn-default")
+            if (recommendation_id != 999) {
+              $(elem).addClass("btn-success")
+            } else {
+              $(elem).addClass("btn-danger")
+            }
+          }
+        })
+      })
+    })
+
+    $(".prediction-row").each(function(i, elem) {
+      var recommendation_id = $(elem).attr("data-recommendation-id")
+      var $form = $("#feedback-form-" + recommendation_id)
+      var $pred_text = $("#prediction-" + recommendation_id)
+
+      $pred_text.bind('copy', function() {
+        $(".feedback-selected_recommendation").val(0)
+        $form.find(".feedback-selected_recommendation").val(recommendation_id)
+
+        $.ajax({
+          url: "{{ url_for('post_feedback', id=project.id) }}",
+          type: "POST",
+          data: $form.serialize()
+        })
+      })
+    })
+  })
+  </script>
 {% endblock %}

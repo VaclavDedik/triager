@@ -1,3 +1,6 @@
+import re
+import hashlib
+
 from classifier.document import Document
 
 import parsers
@@ -39,6 +42,27 @@ class Project(db.Model):
     recall = db.Column(db.Float(), default=0.0)
 
     __table_args__ = {'sqlite_autoincrement': True}
+
+
+class Feedback(db.Model):
+    id = db.Column(db.String(128), primary_key=True)
+
+    project_id = db.Column(db.Integer, db.ForeignKey('project.id'))
+    project = db.relationship("Project")
+
+    selected_recommendation = db.Column(db.Integer)
+    confirmed_recommendation = db.Column(db.Integer)
+
+    @classmethod
+    def get_id_from_doc(cls, document, project=None):
+        title = document.title if document.title else ""
+        content = document.content if document.content else ""
+        project_id = str(project.id) if project else ""
+
+        striped_doc = re.sub(r'\s+', '', project_id + title + content)
+        digest = hashlib.sha512(striped_doc).hexdigest()
+        
+        return digest
 
 
 class DataSource(db.Model):

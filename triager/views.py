@@ -7,12 +7,13 @@ import models
 from classifier import tests
 from classifier.document import Document
 from flask import render_template, flash, redirect, url_for
+from flask import jsonify, make_response, request
 from flask.ext.login import login_user, login_required, logout_user
 
 from triager import app, db, config
-from models import Project, TrainStatus as TS
+from models import Project, TrainStatus as TS, Feedback
 from forms import ProjectForm, IssueForm, DataSourceForm, ConfigurationForm
-from forms import LoginForm
+from forms import LoginForm, FeedbackForm
 from auth import User
 from utils import hash_pwd
 
@@ -73,6 +74,7 @@ def view_project(id):
     project = Project.query.get_or_404(id)
 
     form = IssueForm()
+    feedback_form = FeedbackForm()
     predictions = []
     model_path = os.path.join(app.config['MODEL_FOLDER'], '%s/svm.pkl' % id)
     trained = project.train_status != TS.NOT_TRAINED \
@@ -88,9 +90,18 @@ def view_project(id):
                   "You need to add more text to the description or summary.",
                   "error")
 
+        feedback_form.summary.data = form.summary.data
+        feedback_form.description.data = form.description.data
+        existing_feedback = Feedback.query.get(
+            Feedback.get_id_from_doc(issue, project=project))
+        if existing_feedback:
+            feedback_form.confirmed_recommendation.data = \
+                existing_feedback.confirmed_recommendation
+
     fscore = tests.fscore(project.precision, project.recall)
     return render_template("project/view.html", project=project, fscore=fscore,
-                           form=form, predictions=predictions, trained=trained)
+                           form=form, predictions=predictions, trained=trained,
+                           feedback_form=feedback_form)
 
 
 @app.route("/project/create", methods=['GET', 'POST'])
@@ -172,6 +183,52 @@ def delete_project(id):
 
     flash("Project %s successfully deleted." % project.name)
     return redirect(url_for('homepage'))
+
+
+@app.route("/project/<id>/feedback", methods=['POST'])
+def post_feedback(id):
+    project = Project.query.get_or_404(id)
+
+    form = FeedbackForm()
+    if form.validate():
+        issue = Document(form.summary.data, form.description.data)
+        feedback = Feedback()
+        feedback.project = project
+        feedback.id = Feedback.get_id_from_doc(issue, project=project)
+        existing_feedback = Feedback.query.get(feedback.id)
+        if existing_feedback:
+            feedback = existing_feedback
+
+        if form.selected_recommendation.data:
+            feedback.selected_recommendation = \
+                form.selected_recommendation.data
+        if form.confirmed_recommendation.data:
+            feedback.confirmed_recommendation = \
+                form.confirmed_recommendation.data
+        db.session.add(feedback)
+        db.session.commit()
+
+        return jsonify(result="success")
+
+    return jsonify(result="error", errors=form.errors), 400
+
+@app.route("/feedback.csv")
+def feedback_csv():
+    all_feedback = Feedback.query
+    csv_vals = "project_id,selected,confirmed,accuracy,precision,recall\n"
+    for feedback in all_feedback:
+        csv_vals += "%s,%s,%s,%4.4f,%4.4f,%4.4f\n" \
+            % (feedback.project.id, feedback.selected_recommendation,
+               feedback.confirmed_recommendation, feedback.project.accuracy,
+               feedback.project.precision, feedback.project.recall)
+
+    resp = make_response(csv_vals)
+    if request.args.get("plain"):
+        resp.mimetype = "text/plain"
+    else:
+        resp.mimetype = "text/csv"
+
+    return resp
 
 
 #
