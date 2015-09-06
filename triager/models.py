@@ -38,6 +38,8 @@ class Project(db.Model):
     precision = db.Column(db.Float(), default=0.0)
     recall = db.Column(db.Float(), default=0.0)
 
+    __table_args__ = {'sqlite_autoincrement': True}
+
 
 class DataSource(db.Model):
     __tablename__ = "datasource"
