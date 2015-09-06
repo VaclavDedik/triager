@@ -125,8 +125,7 @@ class JiraDataSourceForm(DataSourceForm):
 
 class IssueForm(Form):
     summary = StringField(
-        'Summary',
-        validators=[DataRequired()]
+        'Summary'
     )
 
     description = StringField(

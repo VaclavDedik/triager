@@ -79,8 +79,9 @@ def view_project(id):
     model_path = os.path.join(app.config['MODEL_FOLDER'], '%s/svm.pkl' % id)
     trained = project.train_status != TS.NOT_TRAINED \
         and os.path.isfile(model_path)
+    summary_or_description = form.summary.data or form.description.data
 
-    if trained and form.validate_on_submit():
+    if trained and form.validate_on_submit() and summary_or_description:
         issue = Document(form.summary.data, form.description.data)
         model = joblib.load(model_path)
         try:
@@ -97,6 +98,11 @@ def view_project(id):
         if existing_feedback:
             feedback_form.confirmed_recommendation.data = \
                 existing_feedback.confirmed_recommendation
+
+    if request.method == "POST" and not summary_or_description:
+        err_msg = "Summary or description must not be empty."
+        form.summary.errors.append(err_msg)
+        form.description.errors.append(err_msg)
 
     fscore = tests.fscore(project.precision, project.recall)
     return render_template("project/view.html", project=project, fscore=fscore,
