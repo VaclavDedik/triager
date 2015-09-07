@@ -2,7 +2,7 @@ import os
 import logging
 
 #: Debug flag.
-DEBUG = True
+DEBUG = False
 
 #: Folders where to store data.
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
