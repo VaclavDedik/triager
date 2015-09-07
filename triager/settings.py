@@ -5,8 +5,9 @@ import logging
 DEBUG = False
 
 #: Folders where to store data.
+OPENSHIFT_DATA_DIR = os.environ['OPENSHIFT_DATA_DIR']
 APP_ROOT = os.path.dirname(os.path.abspath(__file__))
-STORAGE_FOLDER = os.path.join(APP_ROOT, '../data')
+STORAGE_FOLDER = os.path.join(OPENSHIFT_DATA_DIR, 'data')
 MODEL_FOLDER = os.path.join(STORAGE_FOLDER, 'model')
 
 #: Important files
@@ -19,7 +20,7 @@ LOG_LEVEL = logging.DEBUG if DEBUG else logging.INFO
 LOG_FORMAT = '[%(asctime)s: %(levelname)s/%(processName)s] %(message)s'
 
 #: Logging directory.
-LOG_DIR = os.path.join(APP_ROOT, '../logs')
+LOG_DIR = os.path.join(OPENSHIFT_DATA_DIR, 'logs')
 
 #: Whether to log connecting to database or not.
 LOG_DB_CONNECTIONS = False
