@@ -1,10 +1,9 @@
 import os
 import re
+import csv
 import logging
 import json
 import numpy as np
-
-from pandas.io.parsers import read_csv
 
 from classifier.document import Document
 from classifier.parsers import DocumentParser, Label
@@ -173,7 +172,12 @@ class CSVBugzillaParser(DocumentParser):
         self.folder = folder
 
     def parse(self):
-        bugs = np.array(read_csv(os.path.join(self.folder, self.BUGS_FILE)))
+        csv_filepath = os.path.join(self.folder, self.BUGS_FILE)
+        bugs = []
+        with open(csv_filepath, 'rb') as csvf:
+            reader = csv.reader(csvf, delimiter=',')
+            bugs.append(reader)
+        bugs = np.array(bugs)
         documents = []
 
         for bug in bugs:
