@@ -5,7 +5,7 @@ setup(
     name="triager",
     version="0.1",
     description="Triager Webapp.",
-    url="https://github.com/VaclavDedik/masters-thesis/webapp",
+    url="https://github.com/VaclavDedik/triager",
     keywords="triage machine_learning bug webapp",
     license="MIT",
 
@@ -28,4 +28,7 @@ setup(
         'numpy>=1.8.0rc1',
         'pandas>=0.15.0'
     ],
+    dependency_links=[
+        'http://github.com/VaclavDedik/classifier/tarball/master#egg=classifier-0.1'
+    ]
 )
