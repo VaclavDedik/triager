@@ -113,6 +113,7 @@ def view_project(id):
 @app.route("/project/create", methods=['GET', 'POST'])
 @login_required
 def create_project():
+    config.reload()
     form = ProjectForm()
     ds_forms = dict([
         (cls.populates, cls()) for cls in DataSourceForm.__subclasses__()])
