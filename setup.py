@@ -25,7 +25,7 @@ setup(
         'croniter>=0.3.8',
         'joblib>=0.8.4',
         'requests>=2.7.0',
-        'numpy>=1.8.0rc1',
+        'numpy>=1.7.1',  # at least 1.8.0rc1 recommended
         'pandas>=0.15.0'
     ],
     dependency_links=[
