@@ -61,7 +61,7 @@ class ProjectForm(Form):
             DataRequired(),
             validate_cron_format
         ],
-        default=config.defaults__schedule,
+        default=lambda: config.defaults__schedule,
         description="Specify how often you want the project to be retrined. "
                     "If you choose to retrain the project model often, "
                     "triager is less likely to base its recommendation on "
@@ -107,7 +107,7 @@ class JiraDataSourceForm(DataSourceForm):
     jira_statuses = StringField(
         'Statuses',
         validators=[DataRequired()],
-        default=config.jira__default_statuses,
+        default=lambda: config.jira__default_statuses,
         description="Pay a lot of attention to this field. This field should "
                     "list all Jira statuses that a finished issue can be in. "
                     "Separate multiple statuses by commas. The value of this "
@@ -120,7 +120,7 @@ class JiraDataSourceForm(DataSourceForm):
     jira_resolutions = StringField(
         'Resolutions',
         validators=[DataRequired()],
-        default=config.jira__default_resolutions,
+        default=lambda: config.jira__default_resolutions,
         description="Pay a lot of attention to this field. This field should "
                     "list all Jira resolutions that a fixed issue can be in. "
                     "It should not include resolutions like 'Wontfix' or "
