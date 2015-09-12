@@ -47,7 +47,11 @@ Where NLTK_DATA is an environment variable that contains path to where you want 
 
 ### How to Configure the Application
 
-There is a python script "settings.py" in the "triager" directory (in the source root) where you can configure your application. At the very least, you should set the DEBUG value to False. You should also consider to change the values of STORAGE_FOLDER and LOG_DIR. It is a good idea to have the variables use environment variables by changing their values like this:
+There is a python script "settings.py" in the "triager" directory (in the source root). You should copy this file into some directory (e.g. wherever your STORAGE_FOLDER will be, see below) and set an environment variable TRIAGER_SETTINGS that points to the file, e.g. like this:
+
+    $ export TRIAGER_SETTINGS="/home/yourname/triager_data/settings.py"
+
+As for configuration in the file, at the very least, you should set the DEBUG value to False. You should also consider to change the values of STORAGE_FOLDER and LOG_DIR. It is a good idea to have the variables use environment variables by changing their values like this:
 
     STORAGE_FOLDER = os.environ['TRIAGER_DATA_DIR']
 

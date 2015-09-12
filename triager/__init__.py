@@ -6,6 +6,7 @@ from flask import Flask
 
 app = Flask(__name__)
 app.config.from_object("triager.settings")
+app.config.from_envvar("TRIAGER_SETTINGS", silent=True)
 db = SQLAlchemy(app)
 login_manager = LoginManager()
 config = Configuration(app.config['STORAGE_FOLDER'])
