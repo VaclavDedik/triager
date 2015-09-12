@@ -59,7 +59,7 @@ Be sure to have those environment variables set and the directories they point t
 
 ### How to Run the Application
 
-The application consists of two parts. First part is the web application that serves incoming http requests. The second part, the scheduler, is used to train the projects for recommendation. If you do not have the scheduler running, the application will not be able to train the projects and the web application will therfore not be able to recommend any assignees for any issues you fill in.
+The application consists of two parts. First part is the web application that serves incoming http requests. The second part, the scheduler, is used to train the projects for recommendation. If you do not have the scheduler running, the application will not be able to train the projects and the web application will therefore not be able to recommend any assignees for any issues you fill in. The web application tells you if the scheduler is not running by printing "Scheduler is not running!" in the top left corner.
 
 **To run the web application** in development, you can just run this command:
 
