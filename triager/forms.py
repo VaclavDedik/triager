@@ -78,32 +78,6 @@ class DataSourceForm(Form):
     pass
 
 
-class BugzillaDataSourceForm(DataSourceForm):
-    populates = "BugzillaDataSource"
-    name = "Bugzilla Data Source"
-
-    bz_filepath = StringField(
-        'File Path',
-        validators=[
-            DataRequired(),
-            Length(max=1023)
-        ]
-    )
-
-
-class MRSDataSourceForm(DataSourceForm):
-    populates = "MRSDataSource"
-    name = "MRS Data Source"
-
-    mrs_filepath = StringField(
-        'File Path',
-        validators=[
-            DataRequired(),
-            Length(max=1023)
-        ]
-    )
-
-
 class JiraDataSourceForm(DataSourceForm):
     populates = "JiraDataSource"
     name = "Jira Data Source"
