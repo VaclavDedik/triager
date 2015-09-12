@@ -32,7 +32,7 @@ class Configuration(object):
         self.svm__cache_size = "2000"
 
         self.jira__default_resolutions = "Fixed"
-        self.jira__default_status = "Resolved,Closed"
+        self.jira__default_statuses = "Resolved,Closed"
 
         self.auth__admin = hash_pwd("admin")
 

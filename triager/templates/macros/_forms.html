@@ -1,6 +1,11 @@
+{% import 'macros/_components.html' as c %}
+
 {% macro text_input(field, errors) %}
 <div class="form-group {% if errors %} has-error {% endif %}">
   {{ field.label(class='control-label') }}
+  {% if field.description %}
+    {{ c.hint(field.description) }}
+  {% endif %}
   {{ field(class='form-control', placeholder=field.label.text) }}
   {% for error in errors %}
     <span class="help-block">{{ error }}</span>
@@ -11,6 +16,9 @@
 {% macro select(field, errors) %}
 <div class="form-group {% if errors %} has-error {% endif %}">
   {{ field.label(class='control-label') }}
+  {% if field.description %}
+    {{ c.hint(field.description) }}
+  {% endif %}
   {{ field(class='form-control') }}
   {% for error in errors %}
     <span class="help-block">{{ error }}</span>
@@ -23,6 +31,9 @@
   <label class="control-label">
     {{ field }}
     {{ field.label.text }}
+    {% if field.description %}
+      {{ c.hint(field.description) }}
+    {% endif %}
   </label>
   {% for error in errors %}
     <span class="help-block">{{ error }}</span>
@@ -43,6 +54,9 @@
 {% macro textarea(field, errors) %}
 <div class="form-group {% if errors %} has-error {% endif %}">
   {{ field.label(class='control-label') }}
+  {% if field.description %}
+    {{ c.hint(field.description) }}
+  {% endif %}
   {{ field(class='form-control', placeholder=field.label.text, rows="10") }}
   {% for error in errors %}
     <span class="help-block">{{ error }}</span>

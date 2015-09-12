@@ -1,3 +1,5 @@
+{% import 'macros/_components.html' as c %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -43,9 +45,8 @@
           {% if not is_scheduler_running %}
           <h4 class="navbar-text">
             <span class="label label-danger">
-              <span>Scheduler is not running!</span>
-              <span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" data-placement="right" 
-                    title="Retraining of the projects won't work untill you start the scheduler."></span>
+              <span>Scheduler is not running</span>
+              {{ c.hint("Retraining of the projects won't work untill you start the scheduler.", type="exclamation") }}
             </span>
           </h4>
         {% endif %}

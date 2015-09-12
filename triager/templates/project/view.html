@@ -11,7 +11,7 @@
     <h3 class="inline status">
       <span class="label label-{{ project.train_status | train_status_color}}">{{ project.train_status | readable_train_status }}
         {% if project.train_status == "failed" and project.training_message %}
-        <span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="{{ project.training_message }}"></span>
+          {{ c.hint(project.training_message, type="exclamation") }}
         {% endif %}
       </span>
     </h3>
