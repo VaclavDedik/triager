@@ -31,3 +31,11 @@ SQLALCHEMY_ECHO = False
 #: WTForms CSRF protection
 CSRF_ENABLED = True
 SECRET_KEY = 'secret'
+
+# Create storage, model and log directories if they do not exist.
+if not os.path.exists(STORAGE_FOLDER):
+    os.makedirs(STORAGE_FOLDER)
+if not os.path.exists(MODEL_FOLDER):
+    os.makedirs(MODEL_FOLDER)
+if not os.path.exists(LOG_DIR):
+    os.makedirs(LOG_DIR)
