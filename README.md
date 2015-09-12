@@ -19,11 +19,11 @@ You need to have this software installed on your computer:
 
 As for HW requirements, it is recommended to have a computer with at least 2 GB of RAM.
 
-I also recomend to use a Linux distribuition to install and run the application. Windows is very unlikely to work as it is not tested with it. Mac OS X should work, but it has not been tested thoroughly to be sure.
+I also recommend to use a Linux distribution to install and run the application. Windows is very unlikely to work as it is not tested with it. Mac OS X should work, but it has not been tested thoroughly to be sure.
 
 ### How to Setup the Application
 
-The application uses a lot of machine learning and natural language processing libraries, so it can be quite hard to sucessfully setup the application. You should first try to just run the setup script like this (you might need root privileges):
+The application uses a lot of machine learning and natural language processing libraries, so it can be quite hard to successfully setup the application. You should first try to just run the setup script like this (you might need root privileges):
 
     $ python setup.py install  
 
@@ -55,11 +55,11 @@ And:
 
     LOG_DIR = os.environ['TRIAGER_LOG_DIR']
 
-Be sure to have those environment variables set and the directories they point to created with write access. If you use openshift, I recommend to point the STORAGE_FOLDER to OPENSHIFT_DATA_DIR and the LOG_DIR to OPENSHIFT_LOG_DIR.
+Be sure to have those environment variables set and the directories they point to created with write access. If you use OpenShift, I recommend to point the STORAGE_FOLDER to OPENSHIFT_DATA_DIR and the LOG_DIR to OPENSHIFT_LOG_DIR.
 
 ### How to Run the Application
 
-The application consists of two parts. First part is the web application that serves incoming http requests. The second part, the scheduler, is used to train the projects for recommendation. If you do not have the scheduler running, the application will not be able to train the projects and the web application will therefore not be able to recommend any assignees for any issues you fill in. The web application tells you if the scheduler is not running by printing "Scheduler is not running!" in the top left corner.
+The application consists of two parts. First part is the web application that serves incoming HTTP requests. The second part, the scheduler, is used to train the projects for recommendation. If you do not have the scheduler running, the application will not be able to train the projects and the web application will therefore not be able to recommend any assignees for any issues you fill in. The web application tells you if the scheduler is not running by printing "Scheduler is not running!" in the top left corner.
 
 **To run the web application** in development, you can just run this command:
 
@@ -69,7 +69,7 @@ You should, however, never run the web application like this in production. The 
 
     $ pip install gunicorn
 
-Or with your system pacakge manager, for example on ubuntu:
+Or with your system package manager, for example on ubuntu:
 
     $ sudo apt-get install gunicorn
 
@@ -77,7 +77,7 @@ After that, you can run this command (in the source root where manage.py is) to 
 
     $ gunicorn -w 4 manage:app
 
-You probably want to run the gunicorn WSGI as deamon (so that it does not get shut down when you exit your session), so you should instead run the command like this:
+You probably want to run the gunicorn WSGI as daemon (so that it does not get shut down when you exit your session), so you should instead run the command like this:
 
     $ gunicorn -w 4 manage:app -D
 

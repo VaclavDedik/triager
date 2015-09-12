@@ -62,9 +62,9 @@ class ProjectForm(Form):
             validate_cron_format
         ],
         default=lambda: config.defaults__schedule,
-        description="Specify how often you want the project to be retrined. "
+        description="Specify how often you want the project to be retrained. "
                     "If you choose to retrain the project model often, "
-                    "triager is less likely to base its recommendation on "
+                    "Triager is less likely to base its recommendation on "
                     "old data. On the other hand, training can take a lot of "
                     "hardware resources in that case. It is very likely that "
                     "it is sufficient for your project to be trained every "
@@ -88,7 +88,7 @@ class JiraDataSourceForm(DataSourceForm):
             DataRequired(),
             URL()
         ],
-        description="URL of the rest api of your Jira instance. It is usually "
+        description="URL of the rest API of your Jira instance. It is usually "
                     "something similar to "
                     "'http://jira.example.com/rest/api/latest/'."
     )
@@ -155,10 +155,10 @@ class ConfigurationForm(Form):
             NumberRange(min=1000)
         ],
         description="Maximum number of tickets/issues/bugs that the "
-                    "triager will use for training. The higher the limit, "
-                    "the more accurate will the triager possibly be. This is, "
+                    "Triager will use for training. The higher the limit, "
+                    "the more accurate will the Triager possibly be. This is, "
                     "however, not certain. On the other hand, the lower the "
-                    "limit, the less time it will take to train the triager. "
+                    "limit, the less time it will take to train the Triager. "
                     "It is reasonable to use a value somewhat between 1000 "
                     "and 10000. Be aware that anything beyond 10000 could "
                     "take days to train."
@@ -218,7 +218,7 @@ class ConfigurationForm(Form):
             NumberRange(min=100)
         ],
         description="SVM cache limit im MB. The higher the value, the more "
-                    "memory will triager require to train projects."
+                    "memory will Triager require to train projects."
     )
 
     jira__default_statuses = StringField(
