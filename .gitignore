@@ -79,8 +79,4 @@ thesis.pdf
 .ipynb_checkpoints
 
 # others
-/data/settings.cfg
-/data/triager.db
-/data/scheduler.pid
-/data/model/*
-!/data/model/.gitkeep
+/data
