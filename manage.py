@@ -9,7 +9,7 @@ from triager.schedulers import RetrainScheduler
 
 
 manager = Manager(app)
-manager.add_command('runserver', Server())
+manager.add_command('runserver', Server(host='0.0.0.0'))
 manager.add_command('runscheduler', RetrainScheduler())
 
 # Setup logging
