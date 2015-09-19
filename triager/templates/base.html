@@ -53,7 +53,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            {% if current_user.is_authenticated() %}
+            {% if current_user.is_authenticated %}
             <li><a href="{{ url_for('settings') }}">Settings</a></li>
             <li><a href="{{ url_for('logout')}}">Log out (logged in as {{ current_user.username }})</a></li>
             {% else %}
@@ -71,7 +71,7 @@
             <li {% if request.endpoint == 'homepage' %}class="active"{% endif %}>
               <a href="{{ url_for('homepage') }}"><span class="glyphicon glyphicon-list" aria-hidden="true"></span> Show all projects</a>
             </li>
-            {% if current_user.is_authenticated() %}
+            {% if current_user.is_authenticated %}
             <li {% if request.endpoint == 'create_project' %}class="active"{% endif %}>
               <a href="{{ url_for('create_project') }}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add another project</a>
             </li>
