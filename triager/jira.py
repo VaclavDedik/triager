@@ -31,7 +31,7 @@ class Jira(object):
             new_limit = result['maxResults']
             new_offset = offset + new_limit
             total = result['total']
-            
+
             while new_offset < limit and new_offset < total:
                 new_get_url = get_url + "&startAt=%s&maxResults=%s" \
                     % (new_offset, new_limit)
@@ -47,3 +47,16 @@ class Jira(object):
             r.raise_for_status()
 
         return r.json()
+
+    def test_jira_availability(self):
+        get_url = self.url
+        if not get_url.endswith("/"):
+            get_url += "/"
+        get_url += "issuetype"
+
+        r = requests.get(get_url, timeout=9.05)
+
+        if not r.ok:
+            r.raise_for_status()
+
+        return r.ok

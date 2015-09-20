@@ -10,6 +10,7 @@ from croniter import croniter
 
 from triager import config
 from triager import auth
+from triager import jira
 
 
 #
@@ -20,6 +21,14 @@ def validate_cron_format(form, field):
         croniter(field.data, time.time())
     except Exception:
         raise ValidationError('Training Schedule must be in a CRON format.')
+
+
+def validate_jira_url(form, field):
+    try:
+        jira_ = jira.Jira(field.data)
+        jira_.test_jira_availability()
+    except Exception as ex:
+        raise ValidationError('Invalid Jira URL: %s' % ex.message)
 
 
 #
@@ -86,7 +95,8 @@ class JiraDataSourceForm(DataSourceForm):
         'Jira API URL',
         validators=[
             DataRequired(),
-            URL()
+            URL(),
+            validate_jira_url
         ],
         description="URL of the rest API of your Jira instance. It is usually "
                     "something similar to "
