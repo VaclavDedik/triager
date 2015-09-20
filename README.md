@@ -96,3 +96,22 @@ You probably want to run the gunicorn WSGI as daemon (so that it does not get sh
 You also, however, want the application to run in background, so you can use nohup to achieve this:
 
     $ nohup python manage.py runscheduler &
+
+## Development
+
+If you want to contribute to the project, you can use vagrant to setup your development environment for this project. There is a Vagrantfile in the source root of this project, so if you have vagrant installed (if not, get it from [here](https://www.vagrantup.com)), you can just run this command to set up your development environment:
+
+    $ vagrant up
+
+To start the application, you need to ssh to the vagrant virtual environment like this:
+
+    $ vagrant ssh
+
+And then go to directory "triager" where you can run the web application and the scheduler like this:
+
+    $ python manage.py runserver &
+    $ python manage.py runscheduler &
+
+To access the web application, you just need to access this web page in your browser:
+
+    http://0.0.0.0:5000
