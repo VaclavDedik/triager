@@ -85,6 +85,7 @@ def train_project(id):
         logging.exception(ex)
 
         project.train_status = TS.FAILED
-        project.training_message = "Reason: %s" % ex
+        project.training_message = "Reason: %s: %s" % (
+            ex.__class__.__name__, ex)
         db.session.add(project)
         db.session.commit()
