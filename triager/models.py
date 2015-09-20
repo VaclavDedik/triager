@@ -58,7 +58,7 @@ class Feedback(db.Model):
         project_id = str(project.id) if project else ""
 
         striped_doc = re.sub(r'\s+', '', project_id + title + content)
-        digest = hashlib.sha512(striped_doc).hexdigest()
+        digest = hashlib.sha512(striped_doc.encode("utf-8")).hexdigest()
 
         return digest
 
