@@ -23,7 +23,11 @@ I also recommend to use a Linux distribution to install and run the application.
 
 ### How to Setup the Application
 
-The application uses a lot of machine learning and natural language processing libraries, so it can be quite hard to successfully setup the application. You should first try to just run the setup script like this (you might need root privileges):
+The application uses a lot of machine learning and natural language processing libraries, so it can be quite hard to successfully setup the application. You should first try to just run the setup script. First, though, you need to have setuptools installed. You can install it like this (on ubuntu):
+
+    $ sudo apt-get install python-setuptools
+
+Then you can run the setup script like this (you might need root privileges):
 
     $ python setup.py install  
 
@@ -33,7 +37,7 @@ This might fail on either numpy or scipy. If so, you can try to install these li
 
 If scikit-learn fails, you can try to install these libraries (on ubuntu):
 
-    $ sudo apt-get install build-essential python-dev python-setuptools \
+    $ sudo apt-get install build-essential python-dev \
                      python-numpy python-scipy \
                      libatlas-dev libatlas3gf-base
 
