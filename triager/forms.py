@@ -119,7 +119,6 @@ class JiraDataSourceForm(DataSourceForm):
 
     jira_resolutions = StringField(
         'Resolutions',
-        validators=[DataRequired()],
         default=lambda: config.jira__default_resolutions,
         description="Pay a lot of attention to this field. This field should "
                     "list all Jira resolutions that a fixed issue can be in. "
@@ -230,7 +229,6 @@ class ConfigurationForm(Form):
 
     jira__default_resolutions = StringField(
         'Default resolutions',
-        validators=[DataRequired()],
         description="Default resolutions value that will be used to prefill "
                     "the resolutions field when creating new projects."
     )

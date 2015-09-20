@@ -80,7 +80,7 @@ class JiraDataSource(DataSource):
     jira_api_url = db.Column(db.String(253))
     jira_project_key = db.Column(db.String(63))
     jira_statuses = db.Column(db.String(63), default="Resolved,Closed")
-    jira_resolutions = db.Column(db.String(63), default="Fixed")
+    jira_resolutions = db.Column(db.String(63))
 
     __mapper_args__ = {
         'polymorphic_identity': 'jira'
@@ -89,9 +89,10 @@ class JiraDataSource(DataSource):
     def get_data(self):
         jira = Jira(self.jira_api_url)
         jql = "project=%s and status in (%s) " + \
-              "and resolution in (%s) and assignee!=null"
-        jql = jql % (self.jira_project_key, self.jira_statuses,
-                     self.jira_resolutions)
+              "and assignee!=null"
+        jql = jql % (self.jira_project_key, self.jira_statuses)
+        if self.jira_resolutions:
+            jql += " resolutions in (%s)" % self.jira_resolutions
         fields = 'summary,description,assignee,created'
         raw_issues = jira.find_all(jql, fields,
                                    limit=int(config.general__ticket_limit))

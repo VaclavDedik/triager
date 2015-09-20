@@ -58,6 +58,7 @@ class RetrainScheduler(Command):
                             % project.id)
                         self._train_project(project)
 
+            db.session.expire_all()
             time.sleep(60)
 
     def _pool_init(self):

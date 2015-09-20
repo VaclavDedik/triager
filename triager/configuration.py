@@ -58,7 +58,7 @@ class Configuration(object):
             if not self.config.has_section(section):
                 self.config.add_section(section)
 
-            if value:
+            if name != "auth__admin" or value:
                 self.config.set(section, option, str(value))
         elif name in ['config_file', 'config']:
             super(Configuration, self).__setattr__(name, value)
