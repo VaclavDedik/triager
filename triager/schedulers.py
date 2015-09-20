@@ -83,7 +83,8 @@ class RetrainScheduler(Command):
             db.session.commit()
 
         # Create new pool
-        self.pool = Pool(processes=5, initializer=self._pool_init)
+        self.pool = Pool(processes=app.config['SCHEDULER_PROCESSES'],
+                         initializer=self._pool_init)
 
         # Start infinite loop
         try:
