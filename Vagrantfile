@@ -38,7 +38,9 @@ Vagrant.configure(2) do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "../data", "/vagrant_data"
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder ".", "/home/vagrant/triager"
+  config.vm.synced_folder "../classifier", "/home/vagrant/classifier"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -66,8 +68,9 @@ Vagrant.configure(2) do |config|
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
-    apt-get install -y python-dev python-setuptools python-numpy python-scipy
-    python /vagrant/setup.py install
+    apt-get install -y python-dev python-pip python-numpy python-scipy
     python -m nltk.downloader -d /home/vagrant/nltk_data stopwords
+    pip install -e /home/vagrant/classifier
+    pip install -e /home/vagrant/triager
   SHELL
 end
