@@ -176,7 +176,8 @@ class CSVBugzillaParser(DocumentParser):
         bugs = []
         with open(csv_filepath, 'rb') as csvf:
             reader = csv.reader(csvf, delimiter=',')
-            bugs.append(reader)
+            for line in reader:
+                bugs.append(line)
         bugs = np.array(bugs)
         documents = []
 
