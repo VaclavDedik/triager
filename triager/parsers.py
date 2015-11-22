@@ -3,6 +3,7 @@ import re
 import csv
 import logging
 import json
+import simplejson
 import numpy as np
 
 from classifier.document import Document
@@ -189,3 +190,28 @@ class CSVBugzillaParser(DocumentParser):
 
     def __str__(self):
         return "CSVBugzillaParser(folder='%s')" % self.folder
+
+
+class JiraJsonParser(DocumentParser):
+    def __init__(self, folder, project_key="PROJECT"):
+        self.folder = folder
+        self.project_key = project_key
+
+    def parse(self):
+        issues = []
+        for fn in os.listdir(self.folder):
+            filepath = os.path.join(self.folder, fn)
+            if os.path.isfile(filepath) and self.project_key in fn:
+                with open(filepath) as f:
+                    issues += simplejson.load(f)['issues']
+
+        documents = []
+        for issue in issues:
+            doc = Document(issue['fields']['summary'],
+                           issue['fields']['description'],
+                           issue['fields']['assignee']['name'])
+            doc._created = issue['fields']['created']
+            if doc.content or len(doc.title.split()) > 1:
+                documents.append(doc)
+
+        return documents
